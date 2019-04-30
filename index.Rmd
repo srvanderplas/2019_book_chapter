@@ -7,12 +7,12 @@ output:
     keep_tex: yes
 header-includes:
    - \usepackage{subfig}
-   - \usepackage{amsmath,amssymb,amstheorem}
+   - \usepackage{amsmath,amssymb}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = F, fig.show = "hold")
-library(imager)
+library(tidyverse)
 ```
 
 ## Introduction
@@ -23,10 +23,11 @@ Regardless of the type of evidence available to investigators, a question of int
 
 If DNA can be extracted from the evidence, or when the evidence can be characterized using quantitative measurements, then we can often resort to standard statistical methods to compare two samples and test the hypothesis of same source. But when the evidence consists of a pattern, then the usual modeling framework is no longer an option. Figure 1 illustrates the problem. The left panel shows a latent print found at a crime scene and the right panel shows a reference print obtained from the suspect’s shoe. We wish to determine whether the shoe could have been the source of the latent print, and if possible, we would like to attach an estimate of uncertainty to the conclusion.
 
-```{r latent-shoe-print, fig.cap = "Latent shoe print and reference outsole image of a suspect's shoe.", fig.subcap=c("Latent print", "Reference outsole print"), fig.asp = 1, fig.ncol = 2, out.width = ".45\\textwidth"}
-load.image(c("figure/crime_scene_90.jpg", "figure/database_60.png"))
-knitr::include_graphics("figure/crime_scene_90.jpg")
-knitr::include_graphics("figure/database_60.png")
+```{r latent-shoe-print, fig.cap = "Latent shoe print and reference outsole image of a suspect's shoe.", out.width = "\\textwidth", echo = F}
+library(imager)
+lst <- lapply(c("figure/crime_scene_90.jpg", "figure/database_60.png"), load.image)
+lst[[1]] <- lst[[1]] %>% imrotate(-90) %>% pad(. , 321, "y", pos = 1, val = rep(1, spectrum(.))) %>% pad(10, "x", val = rep(1, spectrum(.)))
+imappend(lst, "x") %>% imrotate(-90) %>% plot(axes = F)
 ```
 
 Comparing images such as those shown in Figure 1 is challenging for several reasons. First, we do not have, as in the case of DNA, a generative model that would enable us to reduce the dimensionality of the images and establish a formal testing approach. Second, a typical image has tens of thousands of pixels, and further, a pixel-by-pixel comparison is not robust to changes in scale, rotation, and translation. Finally, it is not obvious whether the information contained in the image can be summarized into a few measurements that could then be used to carry out the comparison.
@@ -58,11 +59,54 @@ This determination is made based on comparisons of the marks left on a bullet (o
 Firearms identification – or ballistics, as it is sometimes incorrectly called – has been practiced for a long time. Wilson and Wilson (2003) tell the story of Confederate General Jackson, who was killed in battle in 1863, during the Civil War. The slug recovered from his body was examined and found to be a 0.67-caliber ball, the type of ammunition used by Confederate, not by Union soldiers. This first application of forensic ballistics investigation led to the surprising conclusion that General Jackson had been killed by one of his own men. Today, forensic examiners will seek to ascertain the type of ammunition used in a crime, but they will also try to establish whether a bullet was fired by a specific gun. Figure ... shows the engraved areas left behind by the lands and grooves of the barrel on the bullet. Small imperfections in the surface of the barrel create striations on the bullet as it leaves the gun. Marks are also imprinted to the base of the cartridge case by the breech face of the gun at the time it is fired. The right panel in Figure \ref{fig:bullet-cartridge-images} shows a cartridge case with breech face marks. While the class or rifling characteristics of a gun can be readily determined from the pattern of land engraved areas and grooves on a bullet, or from the shape of the firing pin impression on the base of a cartridge case, it is the microscopic sub-class and individual striations that are used in firearms identification.
 
 ```{r bullet-cartridge-images, fig.cap = "Striations on fired bullets (left) and marks imprinted by the breech face and firing pin on the primer of a spent cartridge case (right)", out.width = ".49\\textwidth"}
-knitr::include_graphics("figure/Bullet.png")
-knitr::include_graphics("figure/Cartridge.png")
+lst <- c("figure/Bullet.png", "figure/Cartridge.png") %>%
+  lapply(., load.image)
+
+lst[[2]] <- imresize(lst[[2]], scale = pmin(height(lst[[1]])/height(lst[[2]]), width(lst[[1]])/width(lst[[2]]))) %>% 
+  pad(10, axes = "x", pos = 1, val = rep(1, spectrum(.)))
+imappend(lst, "x") %>% plot(axes = F)
 ```
 
 As currently practiced, firearms examination is a combination of science and art. But in the past 20 years or so there has been a push to use imaging technology to obtain actual measurements of the surface topology of land engraved areas on bullets and of cartridge case bases that might enable more objective analysis of the similarity between two samples. One of the first proponents of measuring features of the surface topology of bullets were De Kinder and Bonfanti.3 The authors used a laser profilometer to scan bullets and obtain measurements of the distance and depth of striations. They then computed a correlation between two aligned sets of features to quantify the similarity between two bullets. Since then, several new methods that rely on 2D and 3D imaging of bullets and cartridge cases have been proposed to quantify the similarity between two items. In 2017 Hare et al. proposed using supervised learning algorithms to construct a similarity score that can be used to compare bullets.4
 
 For most rifling types, fired bullets exhibit a sequence of land engraved areas separated by grooves. The striations that are used to compare bullets appear on the land engraved areas, so the measurements are obtained by scanning each area individually. Measurements on a land engraved area consist of heights on an $x-y$ grid in micron-level increments. The exact resolution at which images are taken depends on the microscope. In Hare et al., scans made available through the NIST Ballistics Research Database were used. These scans are taken at a resolution of $1.5625 \mu m \times 1.5625\mu m$. The total area that is captured from each land engraved area is approximately $2.2 mm \times 0.6 mm$, and the data are the $x-y-z$  coordinates of each point on the grid. Figure 3 shows the 3D scan of a land engraved area of a bullet fired from a Smith & Wesson firearm. The most informative striations are located close to the bottom of the bullet, in the area shaded in red in the figure.
 
+```{r bullet-scan-crosscut-image, fig.cap = "Scanned surface of a bullet land engraved area. Striations in the area shaded in red are most informative."}
+library(x3ptools)
+library(bulletxtrctr)
+x3pfile <- read_x3p(file = "HS36-B1-B1-L1.x3p")
+
+# Interpolate a bit using imager - fill in holes in places where they're small
+x3pfile2 <- x3pfile
+x3pfile2$surface.matrix %<>% as.cimg() %>% inpaint(5) %>% as.matrix()
+
+na_mask <- x3pfile$surface.matrix %>% is.na() %>% as.cimg() %>% clean(20)
+na_mask2 <- na_mask %>% grow(30) %>% shrink(27)
+
+x3pfile2$surface.matrix[na_mask2] <- NA
+
+crosscut <- x3p_crosscut(x3pfile2)
+nomask <- x3p_add_mask(x3pfile2, matrix("#cd7f32", ncol = 3577, nrow = 1023))
+hline <- x3p_add_hline(nomask, yintercept = unique(crosscut$y - 100), color = "darkred", size = 40)
+image_x3p(hline)
+x3p_snapshot(file = "figure/HS36-Bullet-With-Crosscut.png")
+
+
+x3pdf <- x3p_to_df(x3pfile)
+x3pdf_filter <- filter(x3pdf, y > 150)
+x3pfilter <- df_to_x3p(x3pdf_filter)
+
+image_x3p(x3pfilter, multiply = 3)
+
+pmat <- structure(c(0.9976, -0.00916, 0.06750, 
+0, 0.0681, 0.1071, -0.9919, 
+0, 0.00185, 0.99420, 0.1075, 0, 
+0, 0, 0, 1), .Dim = c(4L, 4L))
+rgl::par3d(userMatrix = pmat)
+x3p_snapshot(file = "figure/HS36-Bullet-With-Crosscut_rotate90.png")
+
+knitr::include_graphics("figure/HS36-Bullet-With-Crosscut.png")
+```
+The algorithm proposed in Hare et al. focuses on the average height of striations observed on a set of consecutive cross-sections of the land engraved area at a value of $y$ where striations appear to be stable. Figure 4 shows the same scanned area as in Figure 3, but viewed as a cross-section where $y$ is fixed. The bottom panel is a single-pixel representation of the cross-section shown in the upper panel. In both panels, it is evident where the land engraved area begins and ends, but in some cases, finding the grooves in an automated way is challenging.
+
+One other attribute that is immediately noticeable from the figure is that the dominant structure in the cross-sectional representation of the land engraved area is the curvature of the surface of the bullet. Therefore, the first step toward extracting a signature from a bullet is to subtract the curvature from the image via a Loess fit. (Loess stands for “locally estimated scatterplot smoothing”, and is an approach to fit a smooth curve to a set of points by fitting a set of simple models to local subsets of the data.) The residuals from the Loess function represent the actual striations and are used to construct a signature. Figure 5 shows the fitted curve in blue in the top panel, and the Loess residuals in the bottom panel. Note that the range of the residuals is approximately 6𝜇mm. For some combinations of ammunition and gun, the striations are less pronounced.
