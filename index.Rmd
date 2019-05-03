@@ -237,12 +237,12 @@ tmp <- unnest(f3nest) %>%
 tmp %>% 
   select(KM, cms, non_cms, matches, mismatches, D, ccf, H.H) %>%
   set_names(c("Matches", "CMS", "CNMS", "# Matches", "# Non-Matches", "D", "CCF", "H.H")) %>%
-  mutate(Matches = ifelse(Matches, "KM", "KNM")) %>%
+  mutate(Matches = ifelse(Matches, "Match (KM)", "Non-Match (KNM)")) %>%
   gather(key = "key", value = "value", -Matches) %>%
   ggplot(aes(x = value, fill = Matches)) + 
   theme_bw() + 
-  geom_density(color = "black", alpha = .75) + 
-  scale_fill_manual(guide = F, values = c("KNM" = "#73abd0", "KM" = "#bde2eb")) +
+  geom_density(color = "black", alpha = .75, adjust = 2) + 
+  scale_fill_manual(values = c("Non-Match (KNM)" = "#73abd0", "Match (KM)" = "#bde2eb")) +
   facet_wrap(~key, scales = "free", ncol = 4) + 
   ylab("Density") + 
   theme(legend.position = c(1, 0), legend.justification = c(1, 0), axis.title.x = element_blank())
