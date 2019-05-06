@@ -391,7 +391,25 @@ The machine learning methods we have discussed to quantify the similarity betwee
 In the case of DNA profiles, we know that barring laboratory error, a match between two samples is probative, because no two individuals (except identical twins) have the same set of alleles at every marker. For fingerprints, it is also assumed that each person is born with an individual pattern, so that perfect prints from two different individuals should be distinguishable. For all other types of evidence, we have no means to compute a probative value, and therefore, we do not know whether a high degree of similarity between two items is indication or not of a common source. Until recently, forensic examiners in reports or testimony were able to focus on the similarity between two objects and conclude that high degree of similarity implied common source. But the blunders that led to questioning the validity of most forensic disciplines also led the public and the scientific community to revisit assumptions such as the uniqueness and repeatability of striations of rounds fired by a gun. As a result, juries and law professionals today are more likely to expect some discussion about the probative value of a ``match" from forensic experts.
 In the absence of a statistical model that may permit estimating the likelihood of a pattern under different assumptions about provenance, it may be possible to compute an empirical estimate of the frequency with which a given degree of similarity between two items can be expected when the items have a common source and when they do not. Figure XXX illustrates this idea using firearms as an example.
 
+```{r scores-simulated}
+scores_all <- bind_rows(
+  data_frame(score=rbeta(10000, 2, 10), class = "Non-mates"),
+  data_frame(score=rbeta(10000, 4, 2), class = "Mates")
+)
 
+sample_scores <- data_frame(panel = c("Low score", "High score"), score = c(0.4, 0.8))
+
+ggplot() +
+  geom_density(aes(score, color = class, fill=class), data = scores_all, alpha=0.5) +
+  scale_fill_manual("", values = c("orange", "grey50")) + 
+  scale_color_manual("", values = c("orange", "grey50")) + 
+  geom_vline(aes(xintercept = score), data = sample_scores, inherit.aes = F) + 
+  facet_grid(panel~.) + 
+  scale_x_continuous("Score") + 
+  theme_bw() + 
+  theme(axis.title.y = element_blank())
+
+```
 <!-- Add simulated data here? Or replace with real data... -->
 
 The empirical distributions of similarity scores shown in orange and in gray in Figure XXX represent the values of the score that could have been obtained when comparing bullets fired by the same or by different guns, respectively. Suppose that these distributions of scores were obtained from a very large number of pairs of bullets representing the population of guns and ammunition of a certain caliber. A crime is committed and a bullet is recovered from the scene. The suspect’s gun is test fired and the bullet in evidence is compared to the test shot using the algorithm that produced the background scores. Suppose that the resulting score is 0.8, as in the top panel in Figure XXX. Visual inspection suggests that a score of 0.8 appears to be likely if the two bullets were fired from the same gun and unlikely otherwise. We could also calculate the probability of observing a score of 0.8 under each of the two empirical distributions. Regardless of the method, we would conclude that the two bullets were likely fired by the same gun. If instead the similarity score was 0.4 as in the bottom panel, it would not be possible to reach a conclusion regarding source with any degree of confidence. The ratio of the heights of both distributions for a score of 0.4 indicate that it is about twice as likely to observe that score if bullets were fired by different guns, which is only weak evidence in favor of the hypothesis of different source. 
