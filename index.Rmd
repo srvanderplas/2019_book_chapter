@@ -312,7 +312,7 @@ To explore whether the random forest fitted to the Hamby et al. bullets has good
 
 We have found that some guns including Sig Sauer and Berettas impart shallow engravings, and we are currently revising the algorithm so that it will adapt to differences in depth of striations.  \autoref{fig:score-match-plot} shows the results observed in one such test set. Each pairwise comparison is represented as a square, with the center of the square shaded to represent the composite match score for the six lands on each bullet; the border of the square is colored orange if the bullets are from the same source. In the test set shown in \autoref{fig:score-match-plot}, there are three reference shots from each of eight barrels, and 10 fired rounds of unknown provenance. The test set was open, which means that it was possible that some of the test shots were not fired by any of the eight study barrels and that one or more of the barrels may have fired none of the 10 test shots; in this case, questioned bullets Q, Y, and Z did not originate from the 8 barrels in the study.
 
-```{r score-match-plot, fig.cap = "Random forest scores of the similarity between 10 test shots and 24 reference shots from eight 9mm barrels.", out.width = ".8\\textwidth"}
+```{r score-match-plot, fig.cap = "Random forest scores of the similarity between 10 test shots and 24 reference shots from eight 9mm barrels.", out.width = ".8\\textwidth", fig.width = 8, fig.height = 3.5}
 features <- read.csv("data/pd-features.csv.gz")
 features <- features %>% mutate(
   lys = overlap*signature_length*1000/.645,
@@ -402,7 +402,7 @@ p3 <- pdnest %>%
   scale_y_discrete() +
   theme_bw() +
   theme(legend.position = "bottom") +
-  #  coord_equal() +
+   # coord_equal() +
   geom_tile(aes(colour = TRUE),
     size = .5,
     data = filter(pdnest, KM)
@@ -465,6 +465,6 @@ This year we celebrate a decade since the publication of the 2009 NRC report on 
 <!-- Need to change this to be more firearms specific? -->
 <!-- Machine learning has the potential to greatly improve the way in which forensic scientists evaluate pattern and other types of evidence, and researchers in CSAFE are pioneering the use of learning methods in forensic applications with impressive results. As well as the bullet matching work discussed here, Kong et al. use a convolutional neural net to automatically determine the mark and model of the shoe that left a print at a crime scene and multi-channel deep features for matching a questioned image to reference images from a database.7 Park and Carriquiry8 show that at least for the data that are available, a random forest exhibits significantly fewer mis-classification errors for glass fragments than the methods currently proposed as the standard by the American Society for Testing and Materials.9, 10 -->
 
-No algorithm will completely replace humans for the analysis and interpretation of evidence, but with the appropriate background databases, and after extensive testing and validation, algorithms can help eliminate some of the subjectivity that permeates most forensic disciplines and can serve to at least approximate the degree of uncertainty in forensic conclusions.
+No algorithm will completely replace humans for the analysis and interpretation of evidence, but with appropriate background databases, extensive testing, and validation, algorithms can help eliminate some of the subjectivity of forensic firearms identification as it is currently practiced and can serve to at least approximate the degree of uncertainty in forensic conclusions.
 
 # References
