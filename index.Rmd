@@ -299,7 +299,7 @@ f3nest %>% select(KM = KM_sam, sam_rf) %>%
   ggplot(aes(x = sam_rf, y = KM2, color = KM2, shape = KM2)) +
   facet_grid(method~.) +
   geom_jitter() +
-  scale_color_manual(guide = F, values = c("KNM" = "#73abd0", "KM" = "#bde2eb")) +
+  scale_color_manual(guide = F, values = c("KNM" = "darkgrey", "KM" = "darkorange")) +
   scale_shape_discrete(guide = F) +
   theme_bw() +
   theme(axis.title.y = element_blank()) +
