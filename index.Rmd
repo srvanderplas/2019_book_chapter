@@ -5,7 +5,7 @@ date: "2019-04-30"
 output: 
   pdf_document: 
     citation_package: natbib
-    keep_tex: yes
+    keep_tex: no
 header-includes:
   - \usepackage{subfig}
   - \usepackage{amsmath,amssymb}
