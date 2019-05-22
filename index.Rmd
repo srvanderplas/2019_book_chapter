@@ -76,7 +76,7 @@ A good algorithm strikes a balance between the competing objectives of optimizin
 
 Here, we focus on the use of supervised machine learning algorithms to identify the source of bullets and cartridge cases. 
 
-## A Brief History of Firearms Identification
+# A Brief History of Firearms Identification
 
 <!-- Not the first - 1835 Bow Street Runners case in London (homemade ammunition matched to a mold) -->
 Firearms identification – or ballistics, as it is sometimes incorrectly called – has been practiced for a long time.  \citet{wilson2003written} tell the story of Confederate General Jackson, who was killed in battle in 1863, during the Civil War. The slug recovered from his body was examined and found to be a 0.67-caliber ball, the type of ammunition used by Confederate, not by Union soldiers, leading to the surprising conclusion that General Jackson had been killed by one of his own men. 
@@ -93,7 +93,7 @@ Firearms investigation became more formalized in the 1930s, with textbooks publi
 
 Some methods have been developed to automatically match high-resolution photographs of bullet land engraved areas or cartridge cases \citep{gardnerComputerIdentificationBullets1978,geradtsImageMatchingAlgorithms2001}, but in the past 20 years or so there has been a push to use 3D imaging technology to obtain actual measurements of the surface topology of land engraved areas on bullets and of cartridge case bases. Methods which depend on photographs rely on inferring the height of the surface from the color of the image pixels; topological measurements provide much greater precision in assessing the similarity of two samples. One of the first proponents of measuring features of the surface topology of bullets were \citet{dekinderAutomatedComparisonsBullet1999}. The authors used a laser profilometer to scan bullets and obtain measurements of the distance and depth of striations. They then computed a correlation between two aligned sets of features to quantify the similarity between two bullets. Since then, several new methods that rely on 2D and 3D imaging of bullets and cartridge cases have been proposed to quantify the similarity between two items\citep{tongFiredCartridgeCase2014,fischerDigitalCrimeScene2014,chumbleyValidationToolMark2010}. In 2017, \citeauthor{hare2017algorithmic} demonstrated the use of supervised learning algorithms to construct a similarity score that can be used to assess the strength of a match between two bullets quantitatively, and \citet{taiFullyAutomaticMethod2018} constructed a similar scoring algorithm for cartridge case comparison.
 
-## Microscopic Imperfections
+# Microscopic Imperfections
 
 Forensic examiners will begin an examination of crime scene evidence by identifying class characteristics, such as ammunition type, rifle pitch, number of grooves, and other features shared by many different guns and bullets; the second stage of the process is to establish whether a bullet was fired by a specific gun using individualizing characteristics. Most automatic algorithms bypass the comparison of class characteristics and only examine the microscopic sub-class and individual striations that uniquely identify a specific barrel. The left panel of \autoref{fig:bullet-cartridge-images} shows the engraved areas left behind by the lands and grooves of the barrel on the bullet. Small imperfections in the surface of the barrel create striations on the bullet as it leaves the gun. Marks are also imprinted to the base of the cartridge case by the breech face of the gun at the time it is fired; these marks can also be compared through a similar process. The right panel in Figure \ref{fig:bullet-cartridge-images} shows a cartridge case with breech face marks.
 
@@ -197,6 +197,8 @@ p2 <- ggplot(aes(x = x, y = sig), data = signature) +
 
 grid.arrange(p1, p2, nrow = 2, heights = c(1, 1.2))
 ```
+
+# Pairwise Comparisons
 
 Once the signatures from two bullets have been extracted, it is possible to compare the overlapped signatures using quantitative methods. For example, it is possible to compute a cross-correlation between two signatures, or to measure differences in the height of peaks or depth of valleys. Indeed, there are several different features that can be quantified and used to decide whether the signatures are similar enough to suggest that the bullets may have been fired from the same gun. \autoref{fig:overlaid-signatures} shows the overlain signatures for two bullets that were fired from the same gun. Even though the signatures are not exactly the same, the similarities are enough to suggest that they may have a common source.
 
