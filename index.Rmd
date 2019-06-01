@@ -24,6 +24,55 @@ library(gridExtra)
 library(tidyverse)
 ```
 
+```{r features-setup}
+
+features <- read.csv("data/H44-old-features.csv")
+
+# f2 <- features %>%
+#   tidyr::separate(land1, c("barrel1", "bullet1", "land1"), "-") %>%
+#   tidyr::separate(land2, c("barrel2", "bullet2", "land2"), "-")
+
+f2nest <- features %>% filter(!(barrel1==barrel2 & bullet1 == bullet2)) %>%
+  group_by( bullet2, barrel1, barrel2, bullet1) %>%  nest()
+
+rotate <- function(x, lag) {
+  n <- length(x)
+  rep(x, 2)[lag+1:n]
+}
+
+f3nest <- f2nest %>% mutate(
+  sam_ccf = data %>% purrr::map_dbl(.f=function(d) {
+    dt = xtabs(ccf ~land1+land2, data=d)
+    drow <- dim(dt)[2]
+    1:drow %>% purrr::map_dbl(.f=function(i) {
+      mean(diag(dt[,rotate(1:drow,i)]))
+    }) %>% max()
+  }),
+  sam_rf = data %>% purrr::map_dbl(.f=function(d) {
+    dt = xtabs(rfscore ~land1+land2, data=d)
+    drow <- dim(dt)[2]
+    1:drow %>% purrr::map_dbl(.f=function(i) {
+      mean(diag(dt[,rotate(1:drow,i)]))
+    }) %>% max()
+  }),
+  sam_rf_phase = data %>% purrr::map_dbl(.f=function(d) {
+    dt = xtabs(ccf ~land1+land2, data=d)
+    drow <- dim(dt)[2]
+    1:drow %>% purrr::map_dbl(.f=function(i) {
+      mean(diag(dt[,rotate(1:drow,i)]))
+    }) %>% which.max()
+  }),
+  KM_sam = sam_rf > 0.5
+)
+
+inphase <- function(land1, land2, sam_rf_phase, ...) {
+  as.numeric(land2) %% 6 == (as.numeric(land1) + sam_rf_phase) %% 6
+}
+
+tmp <- unnest(f3nest) %>%
+  mutate(inphase = purrr::pmap_lgl(., inphase),
+         KM = inphase & KM_sam)
+```
 # Introduction
 
 <!-- Probably need to replace at least some of this with a history/lit review... -->
@@ -70,10 +119,23 @@ While some forensic examiners have years and even decades of experience, the fac
 
 Because of these and several other concerns, the \citeauthor{StrengtheningForensicScience2009} assembled a panel of experts who in 2009 published a report that was strongly critical of all forensic disciplines with the exception of DNA analysis of single-donor or simple mixture samples. The report singled out pattern evidence as particularly lacking in scientific validity and rife with subjectivity, and called for an immediate and sustained research effort to shore up pattern evidence by – among other recommendations – developing the scientific and statistical framework that underpin any scientific discipline. Of particular concern for firearms and toolmark analysis is that the process of individualization be ``precise and repeatable", in contrast to the current methodological guidelines.
 
-In the last few decades, there have been some attempts to develop methods to quantify the similarity between two bullets or two cartridge cases.  An early attempt by XXXXX (citation) consisted in counting the number of consecutively matching striae (CMS) on two bullets.  The idea here is that when two bullets are fired from the same barrel, the number of consecutively matching striations is expected to be high.  While this proposition is likely to be true, the method did not get widely applied in practice because the discriminating power of CMS is limited. Figure \autoref{fig:Hamby-CMS} below was drawn using one of the Hamby sets of bullets (\citeauthor{hamby2009}).  The set of XX bullets were fired from 10 consecutively rifled barrels, and the provenance of each bullet (same or different barrel) is known.  We constructed all possible pairs of bullets, some of which came from the same barrel and some of which did not.  The values along the horizontal axis represent the number of CMS, which for this dataset varied from 0 to 25.  For each value of CMS, the two colors on each column represent the proportion of pairs of bullets that had a common (light blue) or a different (dark blue) source. For example, when CMS is equal to 2, 100\% of pairs with 2 CMS had a different source.  When CMS is 13 or higher, 100\% of all pairs of bullets have a common source.  
+In the last few decades, there have been some attempts to develop methods to quantify the similarity between two bullets or two cartridge cases.  An early attempt by XXXXX (citation) consisted in counting the number of consecutively matching striae (CMS) on two bullets.  The idea here is that when two bullets are fired from the same barrel, the number of consecutively matching striations is expected to be high.  While this proposition is likely to be true, the method did not get widely applied in practice because the discriminating power of CMS is limited. Figure \autoref{fig:Hamby-CMS} below was drawn using one of the Hamby sets of bullets (\citeauthor{hamby2009}).  The set of XX bullets were fired from 10 consecutively rifled barrels, and the provenance of each bullet (same or different barrel) is known.  We constructed all possible pairs of bullets, some of which came from the same barrel and some of which did not.  The values along the horizontal axis represent the number of CMS, which for this dataset varied from 0 to 25.  For each value of CMS, the two colors on each column represent the proportion of pairs of bullets that had a common (orange) or a different (grey) source. For example, when CMS is equal to 2, 100\% of pairs with 2 CMS had a different source.  When CMS is 10 or higher, 100\% of all pairs of bullets have a common source.  
 
-```{r Hamby-CMS, fig.cap = "Proportion of pairs of bullets with same (light blue) or different (dark blue) source given observed number of CMS}.", out.width = ".5\\textwidth"}
-knitr::include_graphics("figure/Hamby-CMS.png")
+```{r Hamby-CMS, fig.cap = "Proportion of pairs of bullets with same (light blue) or different (dark blue) source given observed number of CMS}.", out.width = ".75\\textwidth", fig.width = 6, fig.height = 4}
+# knitr::include_graphics("figure/Hamby-CMS.png")
+tmp %>%
+  mutate(
+    lys = overlap*signature_length*1000/.645,
+    CMS = round(cms2 *lys*.645/1000)
+  ) %>%
+  mutate(km_lab = c("Non-Match (KNM)", "Match (KM)")[KM + 1]) %>%
+  filter(!(!KM & CMS > 10)) %>% # Exclude bad hamby bullets that show as nonmatches
+ggplot(data = .) + 
+  geom_bar(aes(x = CMS, fill = km_lab), position = "fill", color = "black") +
+  scale_y_continuous("Proportion") + 
+  scale_x_continuous("Consecutive Matching Striae (CMS)") +
+  scale_fill_manual("", values = c("Non-Match (KNM)" = "darkgrey", "Match (KM)" = "darkorange")) + 
+  theme(legend.position = "top", legend.justification = 'center')
 ```
 
 From the figure, it seems that -- at least for this particular dataset -- when the observed number of CMS is between 4 and 12, a binary decision of same/different source has a non-negligible probability of being incorrect.
@@ -90,7 +152,13 @@ This chapter is organized as follows.  We first provide a brief description of f
 
 About 12.5 million guns were manufactured in the United States in 2016, of which approximately 50\% were pistols or revolvers.  In the same year, the United States imported slightly over five million firearms, the vast majority of which were handheld pistols and revolvers. Here we briefly describe the components and operation of pistols and revolvers, since according to the FBI \citep{fbi2017} over 70\% of all gun-related crimes involve one of those types of firearms.
 
-The main difference between a revolver and a pistol is the mechanism to load ammunition into the \emph{chamber}.  In a revolver, cartridges are loaded into their own chamber in a cylinder that rotates with each pull of the trigger (in \emph{single-action} revolvers) or continuously, with a continued pull of the trigger (\emph{double-action}).  The capacity of the cylinders tends to be limited to six cartridges, and cartridges are not ejected from the cylinder each time the revolver is fired.  In a pistol, cartridges are loaded into a \emph{magazine} that can contain anywhere between 5 and 18 rounds, depending on caliber and type of magazine.  Pistols are self-loading firearms because a fresh cartridge from the magazine is automatically moved into the single chamber when the \emph{slider} of the gun is pulled backwards. The spring-loaded slider then goes back forward, feeding the first cartridge into the barrel for firing.  The pistol is fired with each new pull of the trigger, and the next cartridge in the magazine is moved into the barrel.  This is why this type of firearm is known as a \emph{semi-automatic} weapon.  In contrast to what happens when a revolver is fired, cartridge cases are ejected from the barrel of a pistol at the time of firing \citep{heard1997}.
+The main difference between a revolver and a pistol is the mechanism to load ammunition into the \emph{chamber}.  In a revolver, cartridges are loaded into their own chamber in a cylinder that rotates with each pull of the trigger (in \emph{single-action} revolvers) or continuously, with a continued pull of the trigger (\emph{double-action}).  The capacity of the cylinders tends to be limited to six cartridges, and cartridges are not ejected from the cylinder each time the revolver is fired.  In a pistol, cartridges are loaded into a \emph{magazine} that can contain anywhere between 5 and 18 rounds, depending on caliber and type of magazine.  Pistols are self-loading firearms because a fresh cartridge from the magazine is automatically moved into the single chamber when the \emph{slider} of the gun is pulled backwards. The spring-loaded slider then goes back forward, feeding the first cartridge into the barrel for firing.  The pistol is fired with each new pull of the trigger, and the next cartridge in the magazine is moved into the barrel.  This is why this type of firearm is known as a \emph{semi-automatic} weapon.  In contrast to what happens when a revolver is fired, cartridge cases are ejected from the barrel of a pistol at the time of firing \citep{heard1997}. \autoref{fig:cutaway} shows a Luger 1901 pistol cutaway with important parts labeled.
+
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{figure/Luger-Cutaway.png}
+\caption{A 1901 Luger pistol. Image modified from Rock Island Auction Co. [CC0], via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Luger_cutaway.jpg})}
+\end{figure}
 
 # A Brief History of Firearms Identification
 
@@ -240,55 +308,6 @@ ggplot(aes(x = x, y = sig, linetype = type), data = aligndf) +
 
 \citet{hare2017algorithmic} considered various features; to decide whether any of them would serve to accurately determine whether two bullets could have been fired from the same gun, they carried out the following experiment. First, they sourced 3D images of bullets that were fired by Hamby et al. using 10 consecutively rifled 9mm Ruger barrels.  Next they constructed all possible pairs of images of land engraved areas; some pairs corresponded to the same land on bullets fired from the same barrel, others corresponded to either different pairs of land engraved areas on bullets fired from the same barrels or to pairs of land engraved areas on bullets fired from different barrels. Then, for each pair of images \citeauthor{hare2017algorithmic} computed the value of each of seven features; the distribution of values of each of the features among pairs of known matching land engraved areas and among pairs of known non-matching land engraved areas are shown in \autoref{fig:empirical-feature-dist}.
 
-```{r features-setup}
-
-features <- read.csv("data/H44-old-features.csv")
-
-# f2 <- features %>%
-#   tidyr::separate(land1, c("barrel1", "bullet1", "land1"), "-") %>%
-#   tidyr::separate(land2, c("barrel2", "bullet2", "land2"), "-")
-
-f2nest <- features %>% filter(!(barrel1==barrel2 & bullet1 == bullet2)) %>%
-  group_by( bullet2, barrel1, barrel2, bullet1) %>%  nest()
-
-rotate <- function(x, lag) {
-  n <- length(x)
-  rep(x, 2)[lag+1:n]
-}
-
-f3nest <- f2nest %>% mutate(
-  sam_ccf = data %>% purrr::map_dbl(.f=function(d) {
-    dt = xtabs(ccf ~land1+land2, data=d)
-    drow <- dim(dt)[2]
-    1:drow %>% purrr::map_dbl(.f=function(i) {
-      mean(diag(dt[,rotate(1:drow,i)]))
-    }) %>% max()
-  }),
-  sam_rf = data %>% purrr::map_dbl(.f=function(d) {
-    dt = xtabs(rfscore ~land1+land2, data=d)
-    drow <- dim(dt)[2]
-    1:drow %>% purrr::map_dbl(.f=function(i) {
-      mean(diag(dt[,rotate(1:drow,i)]))
-    }) %>% max()
-  }),
-  sam_rf_phase = data %>% purrr::map_dbl(.f=function(d) {
-    dt = xtabs(ccf ~land1+land2, data=d)
-    drow <- dim(dt)[2]
-    1:drow %>% purrr::map_dbl(.f=function(i) {
-      mean(diag(dt[,rotate(1:drow,i)]))
-    }) %>% which.max()
-  }),
-  KM_sam = sam_rf > 0.5
-)
-
-inphase <- function(land1, land2, sam_rf_phase, ...) {
-  as.numeric(land2) %% 6 == (as.numeric(land1) + sam_rf_phase) %% 6
-}
-
-tmp <- unnest(f3nest) %>%
-  mutate(inphase = purrr::pmap_lgl(., inphase),
-         KM = inphase & KM_sam)
-```
 
 ```{r empirical-feature-dist, fig.cap = "Empirical feature distributions", fig.width = 8, fig.height = 4, out.width = ".8\\textwidth"}
 tmp %>% 
