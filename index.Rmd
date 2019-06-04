@@ -72,7 +72,7 @@ Because of these and several other concerns, the \citeauthor{StrengtheningForens
 
 In the last few decades, there have been some attempts to develop methods to quantify the similarity between two bullets or two cartridge cases.  An early attempt by XXXXX (citation) consisted in counting the number of consecutively matching striae (CMS) on two bullets.  The idea here is that when two bullets are fired from the same barrel, the number of consecutively matching striations is expected to be high.  While this proposition is likely to be true, the method did not get widely applied in practice because the discriminating power of CMS is limited. Figure \autoref{fig:Hamby-CMS} below was drawn using one of the Hamby sets of bullets (\citeauthor{hamby2009}).  The set of XX bullets were fired from 10 consecutively rifled barrels, and the provenance of each bullet (same or different barrel) is known.  We constructed all possible pairs of bullets, some of which came from the same barrel and some of which did not.  The values along the horizontal axis represent the number of CMS, which for this dataset varied from 0 to 25.  For each value of CMS, the two colors on each column represent the proportion of pairs of bullets that had a common (light blue) or a different (dark blue) source. For example, when CMS is equal to 2, 100\% of pairs with 2 CMS had a different source.  When CMS is 13 or higher, 100\% of all pairs of bullets have a common source.  
 
-```{r Hamby-CMS, fig.cap = "Proportion of pairs of bullets with same (light blue) or different (dark blue) source given observed number of CMS}.", out.width = ".5\\textwidth"}
+```{r Hamby-CMS, fig.cap = "Proportion of pairs of bullets with same (light blue) or different (dark blue) source given observed number of CMS.", out.width = ".5\\textwidth"}
 knitr::include_graphics("figure/Hamby-CMS.png")
 ```
 
@@ -91,6 +91,12 @@ This chapter is organized as follows.  We first provide a brief description of f
 About 12.5 million guns were manufactured in the United States in 2016, of which approximately 50\% were pistols or revolvers.  In the same year, the United States imported slightly over five million firearms, the vast majority of which were handheld pistols and revolvers. Here we briefly describe the components and operation of pistols and revolvers, since according to the FBI \citep{fbi2017} over 70\% of all gun-related crimes involve one of those types of firearms.
 
 The main difference between a revolver and a pistol is the mechanism to load ammunition into the \emph{chamber}.  In a revolver, cartridges are loaded into their own chamber in a cylinder that rotates with each pull of the trigger (in \emph{single-action} revolvers) or continuously, with a continued pull of the trigger (\emph{double-action}).  The capacity of the cylinders tends to be limited to six cartridges, and cartridges are not ejected from the cylinder each time the revolver is fired.  In a pistol, cartridges are loaded into a \emph{magazine} that can contain anywhere between 5 and 18 rounds, depending on caliber and type of magazine.  Pistols are self-loading firearms because a fresh cartridge from the magazine is automatically moved into the single chamber when the \emph{slider} of the gun is pulled backwards. The spring-loaded slider then goes back forward, feeding the first cartridge into the barrel for firing.  The pistol is fired with each new pull of the trigger, and the next cartridge in the magazine is moved into the barrel.  This is why this type of firearm is known as a \emph{semi-automatic} weapon.  In contrast to what happens when a revolver is fired, cartridge cases are ejected from the barrel of a pistol at the time of firing \citep{heard1997}.
+
+```{r pistol, fig.cap = "Simple diagram of a semi-automatic pistol. \\footnotesize{Image modified from \\href{https://XXXXXXXXXXX}.", out.width = ".5\\textwidth"}
+knitr::include_graphics("figure/semi-automatic-gun.png")
+```
+
+
 
 # A Brief History of Firearms Identification
 
