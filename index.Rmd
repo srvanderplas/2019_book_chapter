@@ -156,17 +156,33 @@ The main difference between a revolver and a pistol is the mechanism to load amm
 \begin{figure}
 \centering
 \includegraphics[width=.8\textwidth]{figure/Luger-Cutaway.png}
-\caption{A 1901 Luger pistol. Image modified from Rock Island Auction Co. [CC0], via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Luger_cutaway.jpg})}
+\caption{A 1901 Luger pistol. Image modified from Rock Island Auction Co. [CC0], via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Luger_cutaway.jpg})\label{fig:cutaway}}
 \end{figure}
 
+<!--
 ```{r pistol, eval = F, fig.cap = "Simple diagram of a semi-automatic pistol. \\footnotesize{Image modified from \\href{https://XXXXXXXXXXX}.", out.width = ".5\\textwidth"}
 knitr::include_graphics("figure/semi-automatic-gun.png")
 ```
-When the firearm is fired, several things occur.  First, the firing pin hits the primer at the base of the cartridge, causing a small explosion that ignites the propellant.  As it burns, the propellant creates  gas inside the cartridge case.  The tremendous change in pressure inside the cartridge case separates the bullet from the cartridge and pushes it down the barrel at a speed of about 300 m/s.  Most barrels are \emph{rifled}, meaning that their interior has grooves and lands (typically six of each) at an angle, and this imparts rotation to the bullet as it travels down the barrel.  This improves stability in the flight of the bullet.  Consequently, fired bullets also show a pattern of land impressions and grooves that correspond to the rifling of the barrel.  In addition to separating the bullet from the cartridge, the explosion caused by the accumulation of gases in the cartridge case makes the base of the cartridge case slam against the breech face of the pistol. Cartridge cases in semi-automatic pistols are typically ejected once the bullet is separated. Figure XXXXX shows a cartridge, the base of the fired cartridge, and a bullet with land engraved areas and grooves.
+-->
 
-ADD FIGURE HERE.
+When the firearm is fired, several things occur.  First, the firing pin hits the primer at the base of the cartridge, causing a small explosion that ignites the propellant.  As it burns, the propellant creates  gas inside the cartridge case.  The tremendous change in pressure inside the cartridge case separates the bullet from the cartridge and pushes it down the barrel at a speed of about 300 m/s.  Most barrels are \emph{rifled}, meaning that their interior has grooves and lands (typically six of each) at an angle, and this imparts rotation to the bullet as it travels down the barrel.  This improves stability in the flight of the bullet.  Consequently, fired bullets also show a pattern of land impressions and grooves that correspond to the rifling of the barrel.  In addition to separating the bullet from the cartridge, the explosion caused by the accumulation of gases in the cartridge case makes the base of the cartridge case slam against the breech face of the pistol. Cartridge cases in semi-automatic pistols are typically ejected once the bullet is separated. \autoref{fig:cartridgediag} shows a diagram of a cartridge.  <!--Figure \autoref{fig:marks} shows the base of a cartridge case (left panel) and of a bullet (right panel).-->
 
 
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{figure/ammunition.png}
+\caption{Diagram of a cartridge, with its components. \footnotesize{Image downloaded from Interesting Engineering, via Wikimedia Commons (\url{https://static.interestingengineering.com/images/import/2017/06/bullet.jpg})}}
+\label{fig:cartridgediag}
+\end{figure}
+
+<!--
+\begin{figure}
+\centering
+\includegraphics[width=.4\textwidth]{figure/CartridgeCase.png}\includegraphics[width=.4\textwidth]{figure/Bullet.png}
+\caption{Left panel:  Bottom of a cartridge case.  EM denotes ejector marks, FP denotes firing pin impression and BF denotes breech face impressions. Right panel: Bullet showing engraved land areas and groove impressions. \footnotesize{Cartridge case image downloaded from NIST, via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Cartridge_Case_(7788259910).jpg})}.  Bullet image XXXXXXXX}
+\label{fig:marks}
+\end{figure}
+-->
 
 # A Brief History of Firearms Identification
 
