@@ -175,8 +175,6 @@ Firearms identification – or ballistics, as it is sometimes incorrectly called
 
 In \citeyear{hallMissileWeapon1900}, a paper by \citeauthor{hallMissileWeapon1900} published in the Buffalo Medical Journal detailed methods for test firing weapons (into a bag of meal) for the purposes of comparing the engravings resulting from the rifling. While it is not clear from the paper whether the comparisons made are class characteristics (e.g. the spacing of land and groove engraved areas) or individual characteristics, this represents the first known foray into what might be termed ``modern" examinations of fired bullets. In 1902, testimony concerning the markings on bullets was admitted into evidence \citep{commonwealthVbest} in a criminal case for the first time, and in 1907, fired cartridge cases were also used as evidence \citep{brownsvilleRiot}. In 1912, photographic comparisons were used to examine individualized markings of land and groove engraved areas; enlarged photographs were also used to compare cartridge case marks. In the 1920s, the idea that individualizing characteristics are present on fired bullets and cartridges became more widely accepted across the country, accompanied by an increase in court cases involving evidence from bullets and cartridge cases. A thorough historical review of the discipline of firearms identification can be found in \citep{hamby-thorpe-1999}.
 
-<!-- The complete citation is:  Hamby, J.E., Thorpe, J.W. 2009.  The history of firearm and toolmark identification. AFTE Journal, 31(3) 226-284
---> 
 
 The process of comparing the striations of bullets recovered from a crime scene to test-fired bullets from recovered weapons became much easier in 1925 with the invention of the comparison microscope, which allowed two bullets to be examined simultaneously and manually aligned\citep{afte-examiner-training}. \autoref{fig:comparison-scope} shows a comparison microscope; portions of both bullets under examination are shown in a single unified view window. The same year, a series of two articles in the Saturday Evening Post described the potential uses of firearms identification in popular press \citep{BulletsExpertWitness,BulletsSilentWitness}, increasing the public's awareness of the potential of firearm forensics. Five years later, Goddard would testify about the firearms used in the Valentine's Day Massacre \citep{goddardValentineDayMassacre1930}; this testimony included analysis of the cartridge cases recovered from the scene as well as the markings left on the bullets. 
 
@@ -202,7 +200,48 @@ imappend(lst, "x") %>% plot(axes = F)
 ```
 # Comparison of cartridge case marks
 
+With the advent of high resolution 2D and 3D microscopy, researchers in the last two decades have proposed several new methods to quantify the similarity between two bullets or cartridge cases.  Much of the research has focused on cartridge cases rather than bullets, probably because bullets tend to get damaged on impact and are recovered with lower frequency (NRC, 2008). A partial list of the research results presented in the last two decades includes \citeauthor{bachrach2002}, \citeauthor{vorburger2011}, \citeauthor{weller2012}, \citeauthor{song2013}, \citeauthor{chu2013}, \citeauthor{riva-champod-2014}, \citeauthor{zheng2014}, \citeauthor{vorburger2015}, \citeauthor{song2018}. 
 
+\citeauthor{song2018} review a method called Congruent Matching Cells (CMC) to compare the breech face impressions on two cartridge cases.  The data with which the authors work are 3D images of breech face markings on the base of cartridge cases, obtained via confocal microscopy. The comparison method consists in first dividing the reference sample into a grid of cells and then implementing an automated search for the closest matching areas on the questioned sample.  \autoref{fig:CMC} illustrates the method.
+
+```{r CMC, fig.cap = "The Congruent Matching Cells method. Known sample is shown in the left panel and questioned sample is shown on the right panel. \\footnotesize{Image copied from \citeauthor{song2018}\\href{https://doi.org/10.1016/j.forsciint.2017.12.013}", out.width = ".5\\textwidth"}
+knitr::include_graphics("figure/CMCFig2Song2018.pdf")
+```
+
+
+The number of CMC can be thought of as a {\it score};  when two cartridge cases are fired from the same gun, we expect to see a larger number of CMC than when the rounds were fired from different guns.  To establish a threshold number of CMC to conclude that the samples were indeed fired from the same gun, the authors obtain the empirical distribution of the number of CMC among pairs of cases known to have been fired by the same gun and pairs of cases known to have been fired by different guns.  Their method is promising in that the empirical distributions, at least for the cases they have considered, put mass on distinctly different ranges of number of CMC for known matching and known non-matching pairs of cases.
+
+Instead of dividing the image into cells, a common alternative is to use a global measure of similarity between two images, for example the correlation between the corresponding pixels in the two images. In order for such methods to work, a series of processing and alignment steps is required, and we briefly describe the methods in \citeauthor{Tai-Eddy-2018}, as well as our newer work on 3D topographies.
+
+The first step is to select parts of the image that are of interest, in this case the breechface marks. This means removing the firing pin impression, and any other extraneous details outside the perimeter of the breechface marks. This can be done automatically either using image processing techniques, or in 3D by fitting a plane to the breechface area and setting a distance threshold beyond which information is discarded. Next, the image should be further processed to highlight distinguishing features and remove sources of inaccuracies. For example, a Gaussian filter is commonly applied, roughly corresponding to highlighting individual characteristics that examiners look for, while removing noise from the image acquisition process.
+
+<!--  I cut and pasted and have not had a chance to work on these paragraphs: 
+After processing, a pair of images needs to be aligned to each other before a similarity score can be extracted. Assuming that images have been captured in a roughly similar manner, as is usually the case with equipment used in forensic laboratories, three parameters need to be estimated: the rotation angle, horizontal translation and vertical translation. This can be done using a grid search, looking for the set of parameters that maximizes the similarity measure. Other optimization techniques, such as the Lucas-Kanade algorithm (Lucas et al., 1981), often used in object tracking in the computer vision literature, have also been tested. These have the advantage of much shorter run-times compared to a grid search, but often get stuck in local minima, thus producing poorer overall results.
+
+We test the above methods on various publicly available data sets maintained by NIST (https://tsapps.nist.gov/NRBTD/), and illustrate some of the results. Each data set contains a varying number of breech face images, collected for different purposes by groups in the firearms and toolmarks community. For example, a set called the NIST Ballistics Identification Database Evaluation (NBIDE) has images from 144 cartridge cases generated from three gun types (Sig Sauer, Ruger, and Smith \& Wesson), four guns of each type, four ammunition types (Remington, Winchester, PMC, and Speer), and firing three repetitions for each ammunition type. Both 2D images (using reflectance microscopy) and 3D topographies (using confocal microscopy) were captured. Given these 144 cartridge cases, there are a total of 10,296 pairs, meaning that the procedure for pairwise alignment needs to be done 10,296 times. Since these data were collected as part of an experiment, the ground truth for whether each pair of images comes from the same gun is known, and we can generate plots of the empirical distribution of similarity scores for matching and non-matching pairs. This is in Figure \ref{fig:NBIDEscores}. As we can see, non-matching pairs generally have low similarity scores, while matching pairs have either low or high scores.
+
+\begin{figure}[h]
+        \centering
+                \includegraphics[width=0.4\textwidth]{C:/Users/alicia/Dropbox/CSAFE/Significance/Figures/NBIDEscores.png}
+        \label{fig:NBIDEscores}
+        \caption{\sl{Distribution of similarity scores for matching and non-matching pairs for the NBIDE data set.}}
+\end{figure}
+
+
+Now, if we are interested in a prediction for whether each pair is a match or not, we need to select a cutoff for the similarity score, above which we classify the pair to be a match. If distributions of similarity scores for matching and non-matching pairs were clearly separated for all data sets, such a cutoff would be straightforward to determine, but as we see in Figure \ref{fig:NBIDEscores}, this is not the case. We consider different cutoffs, and illustrate the results using precision and recall graphs in Figure \ref{fig:NBIDEprecRec}.
+
+\begin{figure}[h]
+        \centering
+                \includegraphics[width=0.4\textwidth]{C:/Users/alicia/Dropbox/CSAFE/Significance/Figures/NBIDEprecRec.png}
+        \label{fig:NBIDEprecRec}
+        \caption{\sl{Precision and recall for various cutoffs on the similarity score. Additionally, precision and recall are also calculated for different cutoffs using different linkage methods in hierarchical clustering.}}
+\end{figure}
+
+
+Another issue is the transitivity of matches. Given that we are considering pairs of images, a classification method might produce the result that A matches B and B matches C, while A does not match C. In order to resolve this, we use hierarchical clustering on the pairwise results, with various types of linkages (see e.g. Murtagh et al., 2012). In the above example, using single linkage would simply add a link between A and C, concluding that A, B and C all come from the same gun. Results are also plotted in Figure \ref{fig:NBIDEprecRec}, and we see that average and minimax linkage produces the best results in terms of precision and recall on the NBIDE data set.
+
+We conclude this section with several comments as well as future directions. In an actual implementation of the type of methodology described above, one might select cutoffs depending on the type of performance desired. For example, if an individual might be implicated and prosecuted, false positives could be extremely undesirable, in which case we might like a very high level of precision. If such a method is simply used to generate investigative leads, we might instead prefer high recall. Also, different data sets produce varying quality of results (Figures \ref{fig:NBIDEscores} and \ref{fig:NBIDEprecRec}). This is roughly consistent with observations by examiners that some guns brand or ammunition types produce varying quality of marks. Finally, in light of the criticism of subjectivity in pattern matching techniques, we note that the entire procedure described is fully automatic, requiring no human input and ensuring reproducibility. Such methods require further testing and fine-tuning, but are a promising avenue for further research.
+-->
 
 
 
