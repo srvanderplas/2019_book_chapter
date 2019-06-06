@@ -166,13 +166,13 @@ knitr::include_graphics("figure/semi-automatic-gun.png")
 ```
 -->
 
-When the firearm is fired, several things occur.  First, the firing pin hits the primer at the base of the cartridge, causing a small explosion that ignites the propellant.  As it burns, the propellant creates  gas inside the cartridge case.  The tremendous change in pressure inside the cartridge case separates the bullet from the cartridge and pushes it down the barrel at a speed of about 300 m/s.  Most barrels are \emph{rifled}, meaning that their interior has grooves and lands (typically six of each) at an angle, and this imparts rotation to the bullet as it travels down the barrel.  This improves stability in the flight of the bullet.  Consequently, fired bullets also show a pattern of land impressions and grooves that correspond to the rifling of the barrel.  In addition to separating the bullet from the cartridge, the explosion caused by the accumulation of gases in the cartridge case makes the base of the cartridge case slam against the breech face of the pistol. Cartridge cases in semi-automatic pistols are typically ejected once the bullet is separated. \autoref{fig:cartridgediag} shows a diagram of a cartridge.  <!--\autoref{fig:marks} shows the base of a cartridge case (left panel) and of a bullet (right panel).-->
+When the firearm is fired, several things occur.  First, the firing pin hits the primer at the base of the cartridge, causing a small explosion that ignites the propellant.  As it burns, the propellant creates  gas inside the cartridge case.  The tremendous change in pressure inside the cartridge case separates the bullet from the cartridge and pushes it down the barrel at a speed of about 300 m/s.  Most barrels are \emph{rifled}, meaning that their interior has grooves and lands (typically six of each) at an angle, and this imparts rotation to the bullet as it travels down the barrel.  This improves stability in the flight of the bullet.  Consequently, fired bullets also show a pattern of land impressions and grooves that correspond to the rifling of the barrel.  In addition to separating the bullet from the cartridge, the explosion caused by the accumulation of gases in the cartridge case makes the base of the cartridge case slam against the breech face of the pistol. Cartridge cases in semi-automatic pistols are typically ejected once the bullet is separated. \autoref{fig:cartridgediag} shows a diagram of a cartridge. 
 
 
 \begin{figure}
 \centering
 \includegraphics[width=.7\textwidth]{figure/ammunition.png}
-\caption{Diagram of a cartridge, with its components. \footnotesize{Image downloaded from Interesting Engineering, via Wikimedia Commons (\url{https://static.interestingengineering.com/images/import/2017/06/bullet.jpg})}}
+\caption{Diagram of a cartridge, with its components. \footnotesize{Image downloaded from Interesting Engineering (\url{https://static.interestingengineering.com/images/import/2017/06/bullet.jpg})}}
 \label{fig:cartridgediag}
 \end{figure}
 
@@ -180,7 +180,7 @@ When the firearm is fired, several things occur.  First, the firing pin hits the
 \begin{figure}
 \centering
 \includegraphics[width=.4\textwidth]{figure/CartridgeCase.png}\includegraphics[width=.4\textwidth]{figure/Bullet.png}
-\caption{Left panel:  Bottom of a cartridge case.  EM denotes ejector marks, FP denotes firing pin impression and BF denotes breech face impressions. Right panel: Bullet showing engraved land areas and groove impressions. \footnotesize{Cartridge case image downloaded from NIST, via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Cartridge_Case_(7788259910).jpg})}.  Bullet image XXXXXXXX}
+\caption{Left panel:  Bottom of a cartridge case.  EM denotes ejector marks, FP denotes firing pin impression and BF denotes breech face impressions. Right panel: Bullet showing engraved land areas and groove impressions. \\footnotesize{Cartridge case image downloaded from NIST, (\\url{https://commons.wikimedia.org/wiki/File:Cartridge_Case_(7788259910).jpg})}.}
 \label{fig:marks}
 \end{figure}
 -->
@@ -205,10 +205,10 @@ Some methods have been developed to automatically match high-resolution photogra
 
 # Microscopic Imperfections
 
-<!-- Forensic examiners will begin an examination of crime scene evidence by identifying class characteristics, such as ammunition type, rifle pitch, number of grooves, and other features shared by many different guns and bullets; the second stage of the process is to establish whether a bullet was fired by a specific gun using individualizing characteristics. Most automatic algorithms bypass the comparison of class characteristics and only examine the microscopic sub-class and individual striations that uniquely identify a specific barrel. The left panel of \autoref{fig:bullet-cartridge-images} shows the engraved areas left behind by the lands and grooves of the barrel on the bullet. Small imperfections in the surface of the barrel create striations on the bullet as it leaves the gun. Marks are also imprinted to the base of the cartridge case by the breech face of the gun at the time it is fired; these marks can also be compared through a similar process. The right panel in Figure \ref{fig:bullet-cartridge-images} shows a cartridge case with breech face marks.-->
 
 Forensic examiners will begin an examination of crime scene evidence by identifying class characteristics, such as ammunition type, rifle pitch, number of grooves, shape of the firing pin and other features shared by many different guns and bullets; the second stage of the process is to establish whether a bullet was fired by a specific gun using individualizing characteristics. Most automatic algorithms bypass the comparison of class characteristics and only examine the microscopic sub-class and individual striations that uniquely identify a specific barrel. The left panel of \autoref{fig:marks} shows the engraved areas left behind by the lands and grooves of the barrel on the bullet. Small imperfections in the surface of the barrel create striations on the bullet as it leaves the gun. Marks are also imprinted to the base of the cartridge case by the breech face of the gun at the time it is fired; these marks can also be compared through a similar process. The right panel in Figure \ref{fig:marks} shows a cartridge case with breech face, firing pin and ejector marks. Firearms examiners tend to focus on the breech face impressions because they appear to be the most discriminating. 
 
+<<<<<<< HEAD
 \begin{figure}
 \centering
 \includegraphics[width=.3\textwidth]{figure/Bullet.png} \includegraphics[width=.3\textwidth]{figure/CartridgeCase.png}
@@ -219,13 +219,20 @@ Forensic examiners will begin an examination of crime scene evidence by identify
 <!--
 ```{r bullet-cartridge-images, fig.cap = "Striations on fired bullets (left) and marks imprinted by the breech face and firing pin on the primer of a spent cartridge case (right)", out.width = "\\textwidth"}
 lst <- c("figure/Bullet.png", "figure/Cartridge.png") %>%
+=======
+```{r marks, fig.cap = "Left panel: Bullet showing engraved land areas and groove impressions. Right panel:  Bottom of a cartridge case.  EM denotes ejector marks, FP denotes firing pin impression and BF denotes breech face impressions.  \\footnotesize{Cartridge case image downloaded from NIST, via Wikimedia Commons, with slight modifications (\\url{https://commons.wikimedia.org/wiki/File:Cartridge_Case_(7788259910).jpg})}.", out.width = ".75\\textwidth"}
+lst <- c("figure/Bullet.png", "figure/CartridgeCase-recolor.png") %>%
+>>>>>>> 5b7cebbf00b04178d80343ce01e1e7500dc46ae9
   lapply(., load.image)
 
-lst[[2]] <- imresize(lst[[2]], scale = pmin(height(lst[[1]])/height(lst[[2]]), width(lst[[1]])/width(lst[[2]]))) %>% 
-  pad(10, axes = "x", pos = 1, val = rep(1, spectrum(.)))
+lst[[2]] <- imresize(lst[[2]], scale = pmin(height(lst[[1]])/height(lst[[2]]), width(lst[[1]])/width(lst[[2]]))) %>%
+  pad(10, axes = "x", pos = -1, val = "white") %>%
+  pad(pmax(0, height(lst[[1]]) - height(.)), axes = "y", pos = 0, val = "white") %>%
+  pad(pmax(0, width(lst[[1]]) - width(.)), axes = "x", pos = 0, val = "white")
+  
 imappend(lst, "x") %>% plot(axes = F)
 ```
--->
+
 
 # Comparison of cartridge case marks
 
