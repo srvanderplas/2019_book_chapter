@@ -2,7 +2,7 @@
 title: "Firearms Examination"
 author: ["Susan VanderPlas, Alicia Carriquiry, Heike Hofmann, James Hamby,  Xiao Hui Tai"]
 date: "2019-04-30"
-thanks: "This work was partially funded by the Center for Statistics and Applications in Forensic Evidence (CSAFE) through Cooperative Agreement #70NANB15H176 between NIST and Iowa State University, which includes activities carried out at Carnegie Mellon University, University of California Irvine, and University of Virginia."
+thanks: ["This work was partially funded by the Center for Statistics and Applications in Forensic Evidence (CSAFE) through Cooperative Agreement #70NANB15H176 between NIST and Iowa State University, which includes activities carried out at Carnegie Mellon University, University of California Irvine, and University of Virginia."]
 output: 
   pdf_document: 
     citation_package: natbib
@@ -212,7 +212,7 @@ Forensic examiners will begin an examination of crime scene evidence by identify
 \begin{figure}
 \centering
 \includegraphics[width=.3\textwidth]{figure/Bullet.png} \includegraphics[width=.3\textwidth]{figure/CartridgeCase.png}
-\caption{Left panel: Bullet showing engraved land areas and groove impressions.Right panel:  Bottom of a cartridge case.  EM denotes ejector marks, FP denotes firing pin impression and BF denotes breech face impressions.  \footnotesize{Cartridge case image downloaded from NIST, via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Cartridge_Case_(7788259910).jpg})}.  Bullet image XXXXXXXX}
+\caption{Left panel: Bullet showing engraved land areas and groove impressions.Right panel:  Bottom of a cartridge case.  EM denotes ejector marks, FP denotes firing pin impression and BF denotes breech face impressions.  \footnotesize{Cartridge case image downloaded from NIST, via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Cartridge_Case_(7788259910).jpg})}.}
 \label{fig:marks}
 \end{figure}
 
