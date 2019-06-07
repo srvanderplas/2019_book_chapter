@@ -131,7 +131,7 @@ tmp %>%
   mutate(km_lab = c("Non-Match (KNM)", "Match (KM)")[KM + 1]) %>%
   filter(!(!KM & CMS > 10)) %>% # Exclude bad hamby bullets that show as nonmatches
 ggplot(data = .) + 
-  geom_bar(aes(x = CMS, fill = km_lab), position = "fill", color = "black") +
+  geom_bar(aes(x = CMS, fill = km_lab), position = "fill", color = "grey20") +
   scale_y_continuous("Proportion") + 
   scale_x_continuous("Consecutive Matching Striae (CMS)") +
   scale_fill_manual("", values = c("Non-Match (KNM)" = "darkgrey", "Match (KM)" = "darkorange")) + 
@@ -268,7 +268,7 @@ We conclude this section with several comments as well as suggestions for future
 
 # Comparison of marks on land engraved areas of bullets
 
-For most rifling types, fired bullets exhibit a sequence of land engraved areas separated by grooves. The striations that are used to compare bullets appear on the land engraved areas, so the measurements are obtained by scanning each area individually. Measurements on a land engraved area consist of heights on an $x-y$ grid in micron-level increments. The exact resolution at which images are taken depends on the microscope. In \citeauthor{hare2017algorithmic}, scans made available through the NIST Ballistics Research Database were used to develop their algorithm. These scans are taken at a resolution of $1.5625 \mu m \times 1.5625\mu m$. The total area that is captured from each land engraved area is approximately $2.2 mm \times 0.6 mm$, and the data are the $x-y-z$  coordinates of each point on the grid. For one land engraved area, the dimension of the $x-y$ matrix is $507 \times 1001$, which means that the number of $z$-values obtained for each land engraved area is slightly over half a million.  For an entire bullet with six land engraved areas, the dataset has more than three million measurements. Data files in the format just described can be downloaded from the NIST ballistics database \citep{NISTdata}. Figure 3 shows the 3D scan of a land engraved area of a bullet fired from a Smith & Wesson firearm. The most informative striations are located close to the bottom of the bullet, in the area shaded in red in the figure.
+For most rifling types, fired bullets exhibit a sequence of land engraved areas separated by grooves. The striations that are used to compare bullets appear on the land engraved areas, so the measurements are obtained by scanning each area individually. Measurements on a land engraved area consist of heights on an $x-y$ grid in micron-level increments. The exact resolution at which images are taken depends on the microscope. In \citeauthor{hare2017algorithmic}, scans made available through the NIST Ballistics Research Database were used to develop their algorithm. These scans are taken at a resolution of $1.5625 \mu m \times 1.5625\mu m$. The total area that is captured from each land engraved area is approximately $2.2 mm \times 0.6 mm$, and the data are the $x-y-z$  coordinates of each point on the grid. For one land engraved area, the dimension of the $x-y$ matrix is $507 \times 1001$, which means that the number of $z$-values obtained for each land engraved area is slightly over half a million.  For an entire bullet with six land engraved areas, the dataset has more than three million measurements. Data files in the format just described can be downloaded from the NIST ballistics database \citep{NISTdata}. Figure 3 shows the 3D scan of a land engraved area of a bullet fired from a Smith & Wesson firearm. Well pronounced striations can usually be found  close to the bottom of the bullet, in the area shaded in red in the figure.
 
 ```{r generate-bullet-renders}
 x3pfile <- read_x3p(file = "data/HS36-B1-B1-L1.x3p")
@@ -315,7 +315,7 @@ signature <- cc_get_signature(crosscut, grooves)
 
 ```
 
-```{r bullet-scan-crosscut-image, fig.cap = "Scanned surface of a bullet land engraved area. Striations in the area shaded in red are most informative.", out.width = ".8\\textwidth"}
+```{r bullet-scan-crosscut-image, fig.cap = "Scanned surface of a bullet land engraved area. Striations in the area shaded in red are well pronounced and informative for the matching process.", out.width = ".8\\textwidth"}
 knitr::include_graphics("figure/HS36-Bullet-With-Crosscut.png")
 ```
 
@@ -406,6 +406,77 @@ tmp %>%
 ```
 \autoref{fig:empirical-feature-dist} suggests that none of the seven features individually can discriminate between known matching and known non-matching pairs. This is because in every case there is significant overlap between the distributions of feature values among the matching and the non-matching pairs. \citet{hare2017algorithmic} proposed instead that features be combined into a single score using a random forest. A random forest is an ensemble supervised learning method for classification or regression based on the idea of decision trees \citep{breimanRandomForests2001}. For classification, the random forest is composed of many decision trees (500 or more) that are grown using bootstrap samples of the original data, and selecting a random subset of the features for each binary split.  The output the most likely class for each unit, and each unit is scored between 0 and 1, where larger scores denote a higher degree of similarity. Since the scores represent the average proportion of units of the predicted class in each terminal node, random forest scores can be thought of as the empirical probability of same class computed for each pair of images.
 
+
+### From Land-to-land comparisons to Bullet-to-bullet comparisons
+ 
+```{r, echo=FALSE, results = 'hide', warning = FALSE, message = FALSE}
+features <- read.csv("data/H44-old-features.csv")
+
+b12 <- features %>% filter(barrel1=="1", bullet1== "1",
+                           barrel2=="1", bullet2== "2")
+p1 <- b12 %>% ggplot(aes(x = land1, y = land2, fill = rfscore)) + 
+  geom_tile() + ggtitle ("Same barrel") +  
+  scale_fill_gradient2("RF score: ", midpoint=0.3, low = "darkgrey", high = "orange", limits=c(0,1)) +
+  theme_bw() + 
+  xlab ("Bullet 2") + ylab("Bullet 1") +
+  theme(legend.position = "bottom") + coord_equal()
+
+bab <- features %>% filter(barrel1=="1", bullet1== "1",
+                           barrel2=="2", bullet2== "1")
+p2 <- bab %>% ggplot(aes(x = land1, y = land2, fill = rfscore)) + 
+  geom_tile() + ggtitle ("Different barrel") +  
+  scale_fill_gradient2("RF score: ", midpoint=0.3, low = "darkgrey", high = "orange", limits=c(0,1)) +
+  theme_bw() + 
+  xlab ("Bullet 2") + ylab("Bullet 1") +
+  theme(legend.position = "bottom") + coord_equal()
+```
+
+
+
+Land-land comparisons lead to a  set of scores for bullet-bullet comparisons. Figure \ref{fig:b2b} shows two matrices of scores for a pair of bullet-bullet matches. On the left, a matrix is shown that is typical for scores from two bullets from the same barrel. On the right, values for a pair of known non-matching bullets are shown.
+
+```{r b2b, echo = FALSE, fig.width = 9, fig.height = 5,  out.width='.65\\textwidth', fig.cap="Overview of land-land matching scores for two pairs of bullet-bullet comparisons. On the left the two bullets are known to come from the same source (barrel) on the right, the bullets are from two different sources (barrels)"}
+grid.arrange(p1, p2, ncol=2, padding=2)
+```
+
+
+When imaging bullets, operators scan one land at a time in a clockwise (left twisted rifling) or anti-clockwise (right twisted rifling) sequence. The order in which scans are acquired is kept as meta-information. Let us assume that lands on a bullet are labelled $\ell_i$ with $i = 1, .., p$. A match between two bullets therefore results in an expected additional $p-1$ matches between pairs of lands. These lands are also expected to be in a sequence, i.e. if there is a match between lands $\ell_i$ on bullet 1 and $\ell_j$ on bullet 2, we also expect lands $\ell_{i\oplus s}$ and $\ell_{j\oplus s}$ to match for all integers $s$, where $\oplus$ is defined as $a \oplus b \equiv \left((a + b)\mod p\right) + 1$. This relationship gives rise to the sequence average maximum (SAM \citet{sam}, also known as 'max phase' in \citet{chu:2010}) to quantify a bullet-to-bullet match:
+
+#### Definition (Sequence Average and its Maximum)
+Let $A$ be a square real-valued matrix of dimensions $p \times p$.
+The $k$th \emph{sequence average} $SA(A, k)$ for $k = 0, ... p-1$ is defined  as 
+$$SA(A, k) = \frac{1}{p} \sum_{i=1}^{p} a_{i,i \oplus k}, \text{ where } i\oplus k := \left((i + k)\mod p\right) + 1.$$
+The \emph{Sequence Average Maximum} \citep[SAM, ][]{sam} of square matrix $R$ is defined as
+$$SAM (R) = \max_{k = 1}^{p} SA(R, k).$$
+
+```{r sam-sketch, out.width='\\textwidth', fig.width=14, fig.height = 4, fig.cap="Sketch of all six land-to-land sequences between two bullets with six lands. "}
+df2 <- data.frame(expand.grid(x = 1:6, y = 1:6))
+df2$case1 <- df2$x == ((df2$y+5) %% 6) + 1
+df2$case2 <- df2$x == ((df2$y+0) %% 6) + 1
+df2$case3 <- df2$x == ((df2$y+1) %% 6) + 1
+df2$case4 <- df2$x == ((df2$y+2) %% 6) + 1
+df2$case5 <- df2$x == ((df2$y+3) %% 6) + 1
+df2$case6 <- df2$x == ((df2$y+4) %% 6) + 1
+
+df2 %>% gather("case", "values", starts_with("case")) %>% 
+  mutate(case = gsub("case", "", case)) %>%
+  mutate(case = paste0("k = ", as.numeric(case)-1)) %>%
+  ggplot(aes(x = factor(x), y = factor(y, levels=1:6), fill = values)) + 
+  geom_tile(colour = "grey20") + 
+  facet_wrap(~case, ncol = 6) +
+  xlab("Bullet 2") + ylab("Bullet 1") +
+  scale_x_discrete(labels = paste0("L",1:6)) +
+  scale_y_discrete(labels = paste0("L",1:6)) +
+  scale_fill_manual("Cell included in SA(A,k)", values = c("white", "grey20")) + 
+  coord_equal() +
+  theme(legend.position="bottom")
+```
+
+Looking back at Figure \ref{fig:b2b}, we see that for the two bullets from the same barrel, the sequence average for 
+$k=2$ is higher than the other sequence averages, and also higher than the sequence averages for the other pair of bullets shown on the right of the figure.
+
+### Results for Hamby
+
 For the case of the Hamby bullets, the random forest produced a perfect classification of all pairs into the two classes. The separation between the values of the scores among known matching and known non-matching pairs was complete, as is shown in \autoref{fig:score-dist}.
 ```{r score-dist, fig.cap = "Random forest scores for the Hamby et al. (2009) known matching pairs of land engraved areas (dark blue) and known non-matching pairs (light blue).", fig.width = 8, fig.height = 4, out.width = ".8\\textwidth"}
 f3nest %>% select(KM = KM_sam, sam_rf) %>%
@@ -423,8 +494,11 @@ f3nest %>% select(KM = KM_sam, sam_rf) %>%
 
 A limitation of all learning algorithms is that they depend critically on the data used to train them and they tend to over-fit the training data. Consequently, the algorithm’s performance when classifying a new set of units can be much worse and result in large mis-classification errors. This occurs when the minimizing the bias in the training data is the dominating criterion. To guard against over-fitting, it is possible to set aside a portion of the training data that can then be used as a test dataset, but even then, the mis-classification error tends to be under-estimated, albeit to a lower extent.
 
-To explore whether the random forest fitted to the \citeauthor{hamby2009} bullets has good classification performance when used to classify pairs of land engraved areas from bullets fired by guns of different make and model, and when the ammunition is also made by a different manufacturer, \citeauthor{hare2017algorithmic} applied the model to thousands of pairs of known matching and known non-matching land engraved areas obtained from crime laboratories across the United States. Results have been promising; the random forest correctly determined every pair of bullets in every study when the gun barrel had conventional (rather than polygonal) rifling and striations were reasonably well marked, and when bullets were not coated with a polymer that flakes on contact with the barrel. 
+To explore whether the random forest fitted to the \citeauthor{hamby2009} bullets has good classification performance when used to classify pairs of land engraved areas from bullets fired from other barrels or by guns of different make and model, and when the ammunition is also made by a different manufacturer, \citeauthor{hare2017algorithmic} applied the model to thousands of pairs of known matching and known non-matching land engraved areas obtained from crime laboratories across the United States. Results have been promising; the random forest correctly determined every pair of bullets in every study when the gun barrel had conventional (rather than polygonal) rifling and striations were reasonably well marked, and when bullets were not coated with a polymer that flakes on contact with the barrel. 
  \autoref{fig:score-match-plot} shows the results observed in one such test set. Each pairwise comparison is represented as a square, with the center of the square shaded to represent the composite match score for the six lands on each bullet; the border of the square is colored orange if the bullets are from the same source. In the test set shown in \autoref{fig:score-match-plot}, there are three reference shots from each of eight barrels, and 10 fired rounds of unknown provenance. The test set was open, which means that it was possible that some of the test shots were not fired by any of the eight study barrels and that one or more of the barrels may have fired none of the 10 test shots; in this case, questioned bullets Q, Y, and Z did not originate from the 8 barrels in the study.
+ 
+
+ 
 
 ```{r score-match-plot, fig.cap = "Random forest scores of the similarity between 10 test shots and 24 reference shots from eight 9mm barrels.", out.width = ".8\\textwidth", fig.width = 8, fig.height = 3.5}
 features <- read.csv("data/pd-features.csv.gz")
