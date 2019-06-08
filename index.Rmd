@@ -642,6 +642,45 @@ ggplot() +
 
 ```
 
+```{r densities, fig.width = 8, fig.height = 3.5, fig.cap="Densities of known matches (orange) and known non-matches (grey) corresponding to all pair-wise land comparisons of the Hamby set.  The large grey points along the x axis mark three hypothetical scores a comparison might result in. The number in white inside the points gives the corresponding score likelihood ratio, indicating the likelihood to observe this score from a known match rather than a known non-match. "}
+tmpnest <- tmp %>% nest(-KM) %>% mutate(
+  model = data %>% purrr::map(.f = function(d) {
+    dens = density(d$ccf, from = 0, to = 1, n = 1001)
+    data.frame(x = dens$x, y = dens$y)
+  })
+)
+
+p <- tmp %>% 
+  mutate(truth = c("Different Source", "Same source")[KM+1]) %>%
+  ggplot(aes(x = ccf)) +
+  geom_density(aes(fill=truth), alpha = 0.6) +
+  scale_fill_manual("", values = c("darkgrey", "darkorange")) +
+  theme(legend.position = "top")
+
+LRscores <- data.frame(x = c(0.4, 0.6, 0.8))
+LRscores$KNM <- tmpnest$model[[1]]$y[which(tmpnest$model[[1]]$x %in% LRscores$x)]
+LRscores$KM <- tmpnest$model[[2]]$y[which(tmpnest$model[[2]]$x %in% LRscores$x)]
+LRscores$lr <- round(LRscores$KM/LRscores$KNM,1)
+LRscores$ylabel <- pmax(LRscores$KM, LRscores$KNM)
+
+p + 
+  geom_line(data = tmpnest$model[[2]], 
+            aes(x = x, y = y), size=1.5, colour="darkorange", fill=NA) +
+  geom_line(data = tmpnest$model[[1]], 
+            aes(x = x, y = y), size=1.5, colour="darkgrey", fill=NA) +
+  xlab("Random forest score") +
+  geom_segment(data = LRscores, aes(x=x, xend=x, y=0, yend=KNM), 
+               colour="darkgrey", size = 2) +
+  geom_segment(data = LRscores, aes(x=x, xend=x, y=0, yend=KM), 
+               colour="darkorange", size = 2) +
+  geom_point(data = LRscores, aes(x = x, y = 0), colour = "grey30", size = 15, alpha = 0.9) +
+  geom_text(data=LRscores[-3,], aes(x = x, y = 0, label=lr), 
+            colour = "grey90", size=5) +
+  geom_text(data=LRscores[3,], aes(x = x, y = 0, label=lr), 
+            colour = "grey90", size=4) +
+  xlim(c(0,1))
+```
+
 The empirical distributions of similarity scores shown in orange and in gray in \autoref{fig:l2l-scores} represent the values of the score that could have been obtained when comparing bullets fired by the same or by different guns, respectively. Suppose that these distributions of scores were obtained from a very large number of pairs of bullets representing the population of guns and ammunition of a certain caliber. A crime is committed and a bullet is recovered from the scene. The suspect’s gun is test fired and the bullet in evidence is compared to the test shot using the algorithm that produced the background scores. Suppose that the resulting score is 0.8, as in the top panel in \autoref{fig:l2l-scores}. Visual inspection suggests that a score of 0.8 appears to be likely if the two bullets were fired from the same gun and unlikely otherwise. We could also calculate the probability of observing a score of 0.8 under each of the two empirical distributions. Regardless of the method, we would conclude that the two bullets were likely fired by the same gun. If instead the similarity score was 0.3 as in the bottom panel, it would not be possible to reach a conclusion regarding source with any degree of confidence. The ratio of the heights of both distributions for a score of 0.3 indicate that it is about twice as likely to observe that score if bullets were fired by different guns, which is only weak evidence in favor of the hypothesis of different source. 
 
 The conclusion is that in order to assess the probative value of a match between two pieces of evidence, we need to have extensive background information about the population from which those two pieces of evidence might have originated. Thus, the construction of those reference databases must become a priority for the scientific community in general and for the forensics community in particular.
