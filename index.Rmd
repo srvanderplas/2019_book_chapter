@@ -250,14 +250,65 @@ After pre-processing, a pair of images needs to be aligned to each other before 
 
 
 ```{r NBIDEscores, fig.cap = "Distribution of similarity scores for matching and non-matching pairs for the NBIDE data set. \\footnotesize{Image provided by  X-H Tai.}", out.width = ".8\\textwidth"}
-knitr::include_graphics("figure/NBIDEscores.png")
+load("data/removedDupsNBIDE.Rdata")
+removedDups %>%
+  mutate(match_fact = factor(match, levels = c(0, 1), labels = c("Non-Match (KNM)", "Match (KM)"))) %>%
+ggplot() + 
+  geom_density(aes(x = corrMax, fill = match_fact), alpha = 0.75) + 
+  scale_fill_manual("", values = c("Non-Match (KNM)" = "darkgrey", "Match (KM)" = "darkorange")) + 
+  scale_x_continuous("Maximum Correlation") + scale_y_continuous("Density") + 
+  theme(legend.position = c(1, 1), legend.justification = c(1, 1))
 ```
 
 
 If the problem of interest is to predict whether a specific pair of cartridge cases have the same source, we need to select a cutoff for the similarity score, above which we classify the pair to be a match. If distributions of similarity scores for matching and non-matching pairs were clearly separated for all data sets, such a cutoff would be straightforward to determine, but as we see in \autoref{fig:NBIDEscores}, this is not the case. \citeauthor{Tai-Eddy-2018} consider different cutoffs, and illustrate the results using precision and recall graphs in \autoref{fig:NBIDEprecRec}.
 
 ```{r NBIDEprecRec, fig.cap = "Precision and recall for various cutoffs on the similarity score. Additionally, precision and recall are also calculated for different cutoffs using different linkage methods in hierarchical clustering.. \\footnotesize{Image provided by  X-H Tai.}", out.width = ".8\\textwidth"}
-knitr::include_graphics("figure/NBIDEprecRec.png")
+# knitr::include_graphics("figure/NBIDEprecRec.png")
+
+load("data/prNBIDE.Rdata") # original line
+load("data/prNBIDElinks.Rdata") # linkages
+pr <- as.data.frame(pr)
+
+calcAUC <- function(data) {
+  DescTools::AUC(c(1, data$recall, 0), c(0, data$precision, 1))
+}
+
+pr_full <- bind_rows(
+  tibble(
+    link = "Original",
+    numClusters = NA,
+    precision = pr$precision,
+    recall = pr$recall,
+    order = 1:nrow(pr)
+  ),
+  precRecall %>%
+    group_by(link) %>%
+    arrange(numClusters) %>%
+    mutate(order = dplyr::row_number())
+)
+
+matlab_colors <- c(rgb(0.9290, 0.6940, 0.1250),
+                   rgb(0.4940, 0.1840, 0.5560),
+                   rgb(0.4660, 0.6740, 0.1880),
+                   rgb(0.3010, 0.7450, 0.9330),
+                   rgb(0.6350, 0.0780, 0.1840))
+
+pr_full_auc <- pr_full %>% nest(-link, .key = 'roc') %>% 
+  mutate(auc = purrr::map(roc, calcAUC),
+         label = sprintf("%s (AUC = %0.2f)", str_to_title(link), auc)) %>%
+  unnest(roc) %>%
+  mutate(link = factor(link, levels = c("Original", "minimax", "average", "complete", "single"), ordered = T)) %>%
+  arrange(link, order) %>%
+  mutate(label = factor(label, levels = unique(label)))
+
+ggplot() + 
+  geom_path(aes(x = recall, y = precision, color = label), data = pr_full_auc, size = 1.5) + 
+  scale_x_continuous("Recall (TP/Actual Positive)") + scale_y_continuous("Precision (TP/Predicted Positive)") + 
+  ggtitle("Precision vs. Recall") + 
+  scale_color_manual("", values = matlab_colors) + 
+  theme(legend.title = element_blank(), legend.position = c(0, 0), legend.justification = c(0, 0))
+
 ```
 
 In actual cases, forensic practitioners may have multiple cartridge cases to compare, so the issue of 
