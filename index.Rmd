@@ -1,12 +1,16 @@
 ---
 title: "Firearms Examination"
-author: ["Susan VanderPlas, Alicia Carriquiry, Heike Hofmann, James Hamby,  Xiao Hui Tai"]
+author: ["Susan VanderPlas", "Alicia Carriquiry", "Heike Hofmann", "James Hamby", "Xiao Hui Tai"]
 date: "2019-04-30"
 thanks: ["This work was partially funded by the Center for Statistics and Applications in Forensic Evidence (CSAFE) through Cooperative Agreement #70NANB15H176 between NIST and Iowa State University, which includes activities carried out at Carnegie Mellon University, University of California Irvine, and University of Virginia."]
 output: 
   pdf_document: 
     citation_package: natbib
-    keep_tex: no
+    fig_caption: yes
+    keep_tex: yes
+    latex_engine: pdflatex
+    template: template.tex
+graphics: yes
 header-includes:
   - \usepackage{subfig}
   - \usepackage{amsmath,amssymb}
