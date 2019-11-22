@@ -281,7 +281,7 @@ pr_full_auc <- pr_full %>% nest(-link, .key = 'roc') %>%
 ggplot() + 
   geom_path(aes(x = recall, y = precision, linetype = label), data = pr_full_auc) + 
   scale_x_continuous("Recall (TP/Actual Positive)") + scale_y_continuous("Precision (TP/Predicted Positive)") + 
-  ggtitle("Precision vs. Recall") +
+  ggtitle("Precision vs. Recall") + 
   scale_linetype_manual("", values = c("solid", "dotdash", "dashed", "longdash", "dotted")) + 
   theme_bw() + 
   # scale_color_manual("", values = matlab_colors) + 
@@ -441,7 +441,7 @@ tmp %>%
 ### From Land-to-land comparisons to Bullet-to-bullet comparisons
  
 ```{r, echo=FALSE, results = 'hide', warning = FALSE, message = FALSE}
-features <- read.csv("data/H44-old-features.csv") 
+features <- read.csv("data/H44-old-features.csv")
 
 b12 <- features %>% filter(barrel1=="1", bullet1== "1",
                            barrel2=="1", bullet2== "2")
@@ -565,11 +565,11 @@ f2 <- features %>%
 
 
 unknowns <- read.csv("data/pd-features-unknown.csv")
-unknowns <- unknowns %>% filter(bullet1 != bullet2) 
+unknowns <- unknowns %>% filter(bullet1 != bullet2)
 unknowns <- unknowns %>% mutate(
-  bullet2 = gsub("Unknown 1-", "", bullet2),
-  bullet1 = gsub("Unknown 1-", "", bullet1)
-)
+    bullet2 = gsub("Unknown 1-", "", bullet2),
+    bullet1 = gsub("Unknown 1-", "", bullet1)
+  )
 f3 <- rbind(
   f2 %>%
     select(
