@@ -230,7 +230,7 @@ removedDups %>%
   mutate(match_fact = factor(match, levels = c(0, 1), labels = c("Non-Match (KNM)", "Match (KM)"))) %>%
 ggplot() + 
   geom_density(aes(x = corrMax, fill = match_fact), alpha = 0.75) + 
-  scale_fill_manual("", values = c("Non-Match (KNM)" = "white", "Match (KM)" = "darkgrey")) + 
+  scale_fill_manual("", values = c("Non-Match (KNM)" = "white", "Match (KM)" = "grey10")) + 
   scale_x_continuous("Maximum Correlation") + scale_y_continuous("Density") + 
   theme_bw() + 
   theme(legend.position = c(1, 1), legend.justification = c(1, 1), legend.title = element_blank(), legend.background = element_rect(fill = "transparent"))
@@ -429,7 +429,7 @@ tmp %>%
   ggplot(aes(x = value, fill = Matches)) + 
   theme_bw() + 
   geom_density(color = "black", alpha = .75, adjust = 2) + 
-  scale_fill_manual(values = c("Non-Match (KNM)" = "white", "Match (KM)" = "darkgrey")) +
+  scale_fill_manual(values = c("Non-Match (KNM)" = "white", "Match (KM)" = "grey10")) +
   facet_wrap(~key, scales = "free", ncol = 4) + 
   ylab("Density") + 
   theme_bw() + 
@@ -691,7 +691,7 @@ p <- tmp %>%
   mutate(truth = c("Different source", "Same source")[KM+1]) %>%
   ggplot(aes(x = ccf)) +
   geom_density(aes(color = truth, fill=truth), alpha = 0.6) +
-  scale_fill_manual("", values = c("white", "grey10")) +
+  scale_fill_manual("", values = c("white", "grey20")) +
   scale_color_manual("", values = c("lightgrey", "grey10")) +
   theme(legend.position = "top")
 
