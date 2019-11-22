@@ -93,9 +93,9 @@ As noted in \citet{significance}, the fact that the evaluation of pattern eviden
 
 Because of these and several other concerns, the \citeauthor{StrengtheningForensicScience2009} assembled a panel of experts who in 2009 published a report that was strongly critical of all forensic disciplines with the exception of DNA analysis of single-donor or simple mixture samples. The report singled out pattern evidence as particularly lacking in scientific validity and rife with subjectivity, and called for an immediate and sustained research effort to shore up pattern evidence by – among other recommendations – developing the scientific and statistical framework that underpin any scientific discipline. Of particular concern for firearms and toolmark analysis is that the process of individualization be "precise and repeatable", in contrast to the current methodological guidelines.
 
-In the last few decades, there have been some attempts to develop methods to quantify the similarity between two bullets or two cartridge cases.  An early attempt by \citet{biasottiStatisticalStudyIndividual1959} consisted of counting the number of consecutively matching striae (CMS) on two bullets.  The idea here is that when two bullets are fired from the same barrel, the number of consecutively matching striations is expected to be high.  While this proposition is likely to be true, the method did not get widely applied in practice because the discriminating power of CMS is limited. \citeauthor{hamby2009} (2009) were the first to assemble an experimental set of bullets that could be used to investigate the reproducibility of firearms examination.  They created 240 replicate sets of 20 reference bullets fired from 10 consecutively manufactured barrels and 15 questioned bullets that were known to have been fired by the barrels in the study.  By now, the 240 sets have been examined by over 700 participating firearms examiners worldwide, 14 of whom have used some form of ballistic imaging technology.  While the design of this experimental dataset would have been improved by, for example, including questioned bullets fired by barrels other than the 10 barrels considered, the database is nonetheless a good resource for researchers. \autoref{fig:HambyCMS}  was drawn using one of the Hamby sets of bullets \citep{hamby2009}.  The set of 20 bullets was fired from 10 consecutively rifled barrels, and the provenance of each bullet (same or different barrel) is known.  We constructed all possible pairs of bullets, some of which came from the same barrel and some of which did not.  The values along the horizontal axis represent the number of CMS, which for this dataset varied from 0 to 25.  For each value of CMS, the two colors on each column represent the proportion of pairs of bullets that had a common (grey) or a different (white) source. For example, when CMS is equal to 2, 100\% of pairs with 2 CMS had a different source.  When CMS is 10 or higher, 100\% of all pairs of bullets have a common source.  
+In the last few decades, there have been some attempts to develop methods to quantify the similarity between two bullets or two cartridge cases.  An early attempt by \citet{biasottiStatisticalStudyIndividual1959} consisted of counting the number of consecutively matching striae (CMS) on two bullets.  The idea here is that when two bullets are fired from the same barrel, the number of consecutively matching striations is expected to be high.  While this proposition is likely to be true, the method did not get widely applied in practice because the discriminating power of CMS is limited. \citeauthor{hamby2009} (2009) were the first to assemble an experimental set of bullets that could be used to investigate the reproducibility of firearms examination.  They created 240 replicate sets of 20 reference bullets fired from 10 consecutively manufactured barrels and 15 questioned bullets that were known to have been fired by the barrels in the study.  By now, the 240 sets have been examined by over 700 participating firearms examiners worldwide, 14 of whom have used some form of ballistic imaging technology.  While the design of this experimental dataset would have been improved by, for example, including questioned bullets fired by barrels other than the 10 barrels considered, the database is nonetheless a good resource for researchers. \autoref{fig:HambyCMS}  was drawn using one of the Hamby sets of bullets \citep{hamby2009}.  The set of 20 bullets was fired from 10 consecutively rifled barrels, and the provenance of each bullet (same or different barrel) is known.  We constructed all possible pairs of bullets, some of which came from the same barrel and some of which did not.  The values along the horizontal axis represent the number of CMS, which for this dataset varied from 0 to 25.  For each value of CMS, the two colors on each column represent the proportion of pairs of bullets that had a common (orange) or a different (grey) source. For example, when CMS is equal to 2, 100\% of pairs with 2 CMS had a different source.  When CMS is 10 or higher, 100\% of all pairs of bullets have a common source.  
 
-```{r HambyCMS, fig.cap="Proportion of pairs of bullets with same (grey) or different (white) source given observed number of CMS.", fig.width = 8, fig.height = 4, out.width = ".75\\textwidth"}
+```{r HambyCMS, fig.cap="Proportion of pairs of bullets with same (orange) or different (grey) source given observed number of CMS.", fig.width = 8, fig.height = 4, out.width = ".75\\textwidth"}
 tmp %>%
   mutate(
     lys = overlap*signature_length*1000/.645,
@@ -107,8 +107,7 @@ ggplot(data = .) +
   geom_bar(aes(x = CMS, fill = km_lab), position = "fill", color = "grey20") +
   scale_y_continuous("Proportion") + 
   scale_x_continuous("Consecutive Matching Striae (CMS)") +
-  scale_fill_manual("", values = c("Non-Match (KNM)" = "white", "Match (KM)" = "darkgrey")) + 
-  theme_bw() + 
+  scale_fill_manual("", values = c("Non-Match (KNM)" = "darkgrey", "Match (KM)" = "darkorange")) + 
   theme(legend.position = "top", legend.justification = 'center')
 ```
 
@@ -130,7 +129,7 @@ The main difference between a revolver and a pistol is the mechanism to load amm
 
 \begin{figure}
 \centering
-\includegraphics[width=.7\textwidth]{figure/Luger-Cutaway_greyscale.png}
+\includegraphics[width=.7\textwidth]{figure/Luger-Cutaway.png}
 \caption{A 1901 Luger pistol. Image modified from Rock Island Auction Co. [CC0], via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Luger_cutaway.jpg})\label{fig:cutaway}}
 \end{figure}
 
@@ -145,7 +144,7 @@ When the firearm is fired, several things occur.  First, the firing pin hits the
 
 \begin{figure}
 \centering
-\includegraphics[height=.25\textheight]{figure/WikiAmmo_greyscale.PNG}
+\includegraphics[height=.25\textheight]{figure/WikiAmmo.png}
 \caption{Diagram of a cartridge with its components:  (1) bullet, (2) cartridge case, (3) propellant or powder, (4) base of the cartridge case, and (5) primer. \footnotesize{Image downloaded from Wikipedia (\url{https://en.wikipedia.org/wiki/Bullet})}}
 \label{fig:WikiAmmo}
 \end{figure}
@@ -171,12 +170,12 @@ In \citeyear{hallMissileWeapon1900}, a paper by \citeauthor{hallMissileWeapon190
 The process of comparing the striations of bullets recovered from a crime scene to test-fired bullets from recovered weapons became much more practical in 1925 with the invention of the comparison microscope, which allowed two bullets to be examined simultaneously and manually aligned \citep{afte-examiner-training}. \autoref{fig:comparison-scope} shows an early model of a comparison microscope; portions of both bullets under examination are shown in a single unified view window. The same year, a series of two articles in the Saturday Evening Post described the potential uses of firearms examination in popular press \citep{BulletsExpertWitness,BulletsSilentWitness}, increasing the public's awareness of the potential of firearm forensics. Five years later, Goddard would testify about the firearms used in the Valentine's Day Massacre \citep{goddardValentineDayMassacre1930}; this testimony included analysis of the cartridge cases recovered from the scene as well as the markings left on the bullets. 
 
 ```{r comparison-scope, fig.cap = "A comparison microscope, which consists of two identical microscopes connected to a single eyepiece. The viewer sees the images of both bullet surfaces simultaneously, facilitating alignment and comparison of the bullet striae, shown in the inset image.", out.width = ".7\\textwidth"}
-knitr::include_graphics("figure/ComparisonMicroscope_greyscale.png")
+knitr::include_graphics("figure/ComparisonMicroscope.png")
 ```
 
 Firearms examination became more of a discipline in the 1930s, with textbooks published on the subject in both the UK and the United States \citep{burrard1934identification,hatcherTextbookFirearmsInvestigation1935,gunther1935identification}. The 1930s also saw the foundation of a number of laboratories focused on the scientific examination of forensic evidence, a trend that continued into the 1940s. In the 1950s and 1960s, the field began to move toward greater quantification of firearms evidence, with the introduction of the striagraph \citep{davis1968introduction}, an early forerunner of laser and digital scanning of bullets. In \citeyear{biasottiStatisticalStudyIndividual1959}, \citeauthor{biasottiStatisticalStudyIndividual1959} published a landmark paper discussing the use of visual features of pairwise bullet comparisons to produce a quantitative description of the strength of the match between the two bullets. Biasotti examined the striation marks on fired bullets under a virtual comparison microscope and determined that consecutive matching striations could be used to determine the strength of a match between two bullets which were aligned based of visual assessment of striation patterns. Based on a sample of bullets fired from 24 Smith \& Wesson revolvers, Biasotti determined that bullets fired from different guns were extremely unlikely to have more than 6 consecutively matching striae. This quantitative threshold for determining whether two pieces of evidence originate from the same firearm was the first attempt to derive an empirical threshold for the strength of a match in firearms examination. 
 
-Some methods have been developed to automatically match high-resolution photographs of bullet land engraved areas or cartridge cases \citep{gardnerComputerIdentificationBullets1978,geradtsImageMatchingAlgorithms2001}, but in the past 20 years or so there has been a push to use 3D imaging technology to obtain actual measurements of the surface topology of land engraved areas on bullets and of cartridge case bases. Methods which depend on photographs rely on inferring the height of the surface from the color of the image pixels; topological measurements provide much greater precision in assessing the similarity of two samples. One of the first proponents of measuring features of the surface topology of bullets were \citet{dekinderAutomatedComparisonsBullet1999}. The authors used a laser profilometer to scan bullets and obtain measurements of the distance and depth of striations. They then computed a correlation between two aligned sets of features to quantify the similarity between two bullets. Since then, several new methods that rely on 2D and 3D imaging of bullets and cartridge cases have been proposed to quantify the similarity between two items \citep{tongFiredCartridgeCase2014,fischerDigitalCrimeScene2014,chumbleyValidationToolMark2010}. In 2017, \citeauthor{hare2017algorithmic} demonstrated the use of supervised learning algorithms to construct a similarity score that can be used to assess the strength of a match between two bullets quantitatively, and \citet{taiFullyAutomaticMethod2018} constructed a similar scoring algorithm for cartridge case comparison.
+Some methods have been developed to automatically match high-resolution photographs of bullet land-engraved areas or cartridge cases \citep{gardnerComputerIdentificationBullets1978,geradtsImageMatchingAlgorithms2001}, but in the past 20 years or so there has been a push to use 3D imaging technology to obtain actual measurements of the surface topology of land-engraved areas on bullets and of cartridge case bases. Methods which depend on photographs rely on inferring the height of the surface from the color of the image pixels; topological measurements provide much greater precision in assessing the similarity of two samples. One of the first proponents of measuring features of the surface topology of bullets were \citet{dekinderAutomatedComparisonsBullet1999}. The authors used a laser profilometer to scan bullets and obtain measurements of the distance and depth of striations. They then computed a correlation between two aligned sets of features to quantify the similarity between two bullets. Since then, several new methods that rely on 2D and 3D imaging of bullets and cartridge cases have been proposed to quantify the similarity between two items \citep{tongFiredCartridgeCase2014,fischerDigitalCrimeScene2014,chumbleyValidationToolMark2010}. In 2017, \citeauthor{hare2017algorithmic} demonstrated the use of supervised learning algorithms to construct a similarity score that can be used to assess the strength of a match between two bullets quantitatively, and \citet{taiFullyAutomaticMethod2018} constructed a similar scoring algorithm for cartridge case comparison.
 
 ## Microscopic Imperfections
 
@@ -186,7 +185,7 @@ Forensic examiners will begin an examination of crime scene evidence by identify
 
 \begin{figure}
 \centering
-\includegraphics[width=.3\textwidth]{figure/Bullet_greyscale.png} \includegraphics[width=.3\textwidth]{figure/CartridgeCase_greyscale.png}
+\includegraphics[width=.3\textwidth]{figure/Bullet.png} \includegraphics[width=.3\textwidth]{figure/CartridgeCase.png}
 \caption{Left panel: Bullet showing engraved land areas and groove impressions. Right panel:  Base of a cartridge case.  EM denotes ejector marks, FP denotes firing pin impression and BF denotes breech face impressions.  \footnotesize{Cartridge case image downloaded from NIST, via Wikimedia Commons (\url{https://commons.wikimedia.org/wiki/File:Cartridge_Case_(7788259910).jpg})}.}
 \label{fig:marks}
 \end{figure}
@@ -230,10 +229,9 @@ removedDups %>%
   mutate(match_fact = factor(match, levels = c(0, 1), labels = c("Non-Match (KNM)", "Match (KM)"))) %>%
 ggplot() + 
   geom_density(aes(x = corrMax, fill = match_fact), alpha = 0.75) + 
-  scale_fill_manual("", values = c("Non-Match (KNM)" = "white", "Match (KM)" = "darkgrey")) + 
+  scale_fill_manual("", values = c("Non-Match (KNM)" = "darkgrey", "Match (KM)" = "darkorange")) + 
   scale_x_continuous("Maximum Correlation") + scale_y_continuous("Density") + 
-  theme_bw() + 
-  theme(legend.position = c(1, 1), legend.justification = c(1, 1), legend.title = element_blank(), legend.background = element_rect(fill = "transparent"))
+  theme(legend.position = c(1, 1), legend.justification = c(1, 1))
 ```
 
 
@@ -279,14 +277,13 @@ pr_full_auc <- pr_full %>% nest(-link, .key = 'roc') %>%
   mutate(label = factor(label, levels = unique(label)))
 
 ggplot() + 
-  geom_path(aes(x = recall, y = precision, linetype = label), data = pr_full_auc) + 
+  geom_path(aes(x = recall, y = precision, color = label), data = pr_full_auc, size = 1.5) + 
   scale_x_continuous("Recall (TP/Actual Positive)") + scale_y_continuous("Precision (TP/Predicted Positive)") + 
   ggtitle("Precision vs. Recall") + 
   scale_linetype_manual("", values = c("solid", "dotdash", "dashed", "longdash", "dotted")) + 
   theme_bw() + 
   # scale_color_manual("", values = matlab_colors) + 
   theme(legend.title = element_blank(), legend.position = c(0.01, 0.01), legend.justification = c(0, 0), legend.background = element_rect(fill = "transparent"))
-
 ```
 
 In actual cases, forensic practitioners may have multiple cartridge cases to compare, so the issue of 
@@ -295,9 +292,9 @@ the transitivity of matches becomes important. Given that we are considering pai
 We conclude this section with several comments as well as suggestions for future research directions. In an actual implementation of the type of methodology described above, one might select cutoffs depending on the type of performance desired. For example, in a criminal case where the defendant might be implicated and prosecuted, false positives could be more undesirable than false negatives, in which case we might like a very high level of confidence in a conclusion of same source. If such a method is simply used to generate investigative leads, we might instead prefer high recall. Also, regardless of the type of algorithm used for comparing two breech face marks, different data sets produce varying quality of results (see, e.g., Figures \autoref{fig:NBIDEscores} and \autoref{fig:NBIDEprecRec}). This is roughly consistent with observations by examiners that some gun brands or ammunition types produce varying quality of marks. Finally, in light of the criticism of subjectivity in pattern matching techniques, any algorithm that is fully automatic and produces reliable and reproducible results would be highly desirable. Before any one approach is selected for application in real case work, it will be critical to continue testing and fine-tuning the different approaches that have been proposed, and that look promising.
 
 
-# Comparison of marks on land engraved areas of bullets
+# Comparison of marks on land-engraved areas of bullets
 
-For most rifling types, fired bullets exhibit a sequence of land engraved areas separated by grooves. The striations that are used to compare bullets appear on the land engraved areas, so the measurements are obtained by scanning each area individually. Measurements on a land engraved area consist of heights on an $xy$ grid in micron-level increments. The exact resolution at which images are taken depends on the microscope. In \citet{hare2017algorithmic}, scans made available through the NIST Ballistics Research Database were used to develop their algorithm. These scans are taken at a resolution of $1.5625 \mu m \times 1.5625\mu m$. The total area that is captured from each land engraved area is approximately $2.2 mm \times 0.6 mm$, and the data are the $xyz$  coordinates of each point on the grid. For one land engraved area, the dimension of the $xy$ matrix is $507 \times 1001$, which means that the number of $z$-values obtained for each land engraved area is slightly over half a million.  For an entire bullet with six land engraved areas, the dataset has more than three million measurements. Data files in the format just described can be downloaded from the NIST ballistics database \citep{NISTdata}. Figure 9 shows the 3D scan of a land engraved area of a bullet fired from a Smith & Wesson firearm. Well pronounced striations can usually be found  close to the bottom of the bullet, in the area shaded in darker gray in the figure.
+For most rifling types, fired bullets exhibit a sequence of land-engraved areas separated by grooves. The striations that are used to compare bullets appear on the land-engraved areas, so the measurements are obtained by scanning each area individually. Measurements on a land-engraved area consist of heights on an $xy$ grid in micron-level increments. The exact resolution at which images are taken depends on the microscope. In \citet{hare2017algorithmic}, scans made available through the NIST Ballistics Research Database were used to develop their algorithm. These scans are taken at a resolution of $1.5625 \mu m \times 1.5625\mu m$. The total area that is captured from each land-engraved area is approximately $2.2 mm \times 0.6 mm$, and the data are the $xyz$  coordinates of each point on the grid. For one land-engraved area, the dimension of the $xy$ matrix is $507 \times 1001$, which means that the number of $z$-values obtained for each land-engraved area is slightly over half a million.  For an entire bullet with six land-engraved areas, the dataset has more than three million measurements. Data files in the format just described can be downloaded from the NIST ballistics database \citep{NISTdata}. Figure 9 shows the 3D scan of a land-engraved area of a bullet fired from a Smith & Wesson firearm. Well pronounced striations can usually be found  close to the bottom of the bullet, in the area shaded in darker gray in the figure.
 
 ```{r generate-bullet-renders}
 x3pfile <- read_x3p(file = "data/HS36-B1-B1-L1.x3p")
@@ -344,17 +341,17 @@ signature <- cc_get_signature(crosscut, grooves)
 
 ```
 
-```{r bullet-scan-crosscut-image, fig.cap = "Scanned surface of a bullet land engraved area. Striations in the area shaded in red are well pronounced and informative for the matching process.", out.width = ".8\\textwidth"}
-knitr::include_graphics("figure/HS36-Bullet-With-Crosscut_greyscale.png")
+```{r bullet-scan-crosscut-image, fig.cap = "Scanned surface of a bullet land-engraved area. Striations in the area shaded in red are well pronounced and informative for the matching process.", out.width = ".8\\textwidth"}
+knitr::include_graphics("figure/HS36-Bullet-With-Crosscut.png")
 ```
 
-The algorithm proposed in \citet{hare2017algorithmic} uses the average height of striations on a set of consecutive cross-sections of the land engraved area at a specific value of $y$.  This value is determined automatically, by computing the cross-correlations among heights at consecutive cross-sections and selecting the coordinate $y$ at which the cross-correlations are less variable. This is the area on the land where striations appear to be most stable. \autoref{fig:bullet-scan-crosscut-image} shows the selected value of $y$ for a land engraved area scan. \autoref{fig:bullet-scan-crosscut-side-view} shows the same scanned area as in \autoref{fig:bullet-scan-crosscut-image}, but viewed as a cross-section where $y$ is fixed. The bottom panel is a single-pixel representation of the cross-section shown in the upper panel. In both panels, it is evident where the land engraved area begins and ends, but in some cases, finding the grooves in an automated way is challenging.
+The algorithm proposed in \citet{hare2017algorithmic} uses the average height of striations on a set of consecutive cross-sections of the land-engraved area at a specific value of $y$.  This value is determined automatically, by computing the cross-correlations among heights at consecutive cross-sections and selecting the coordinate $y$ at which the cross-correlations are less variable. This is the area on the land wher striations appear to be most stable. \autoref{fig:bullet-scan-crosscut-image} shows the selected value of $y$ for a land-engraved area scan. \autoref{fig:bullet-scan-crosscut-side-view} shows the same scanned area as in \autoref{fig:bullet-scan-crosscut-image}, but viewed as a cross-section where $y$ is fixed. The bottom panel is a single-pixel representation of the cross-section shown in the upper panel. In both panels, it is evident where the land-engraved area begins and ends, but in some cases, finding the grooves in an automated way is challenging.
 
-The dominant feature in the top panel of \autoref{fig:bullet-scan-crosscut-side-view} is the curvature of the surface of the land engraved area.  This structure is so pronounced that the striations appear to be negligibly shallow. In order to bring the striations to the forefront, the first step in the algorithm proposed by \citet{hare2017algorithmic} is to subtract the curvature from the image by fitting a local polynomial regression model via Loess (\citet{loess}).  The residuals from the Loess function represent the  striations and comprise the data that will be used to construct a signature. \autoref{fig:bullet-remove-curvature} shows the fitted curve in grey in the top panel, and the Loess residuals in the bottom panel. Note the difference in scale of the two figures; the range of heights of the land engraved area on the top panel is about 120$\mu$m, while  the range of the residuals shown in the bottom panel is approximately 6$\mu$m. For some combinations of ammunition and gun, the striations are shallower.
+The dominant feature in the top panel of \autoref{fig:bullet-scan-crosscut-side-view} is the curvature of the surface of the land-engraved area.  This structure is so pronounced that the striations appear to be negligibly shallow. In order to bring the striations to the forefront, the first step in the algorithm proposed by \citet{hare2017algorithmic} is to subtract the curvature from the image by fitting a local polynomial regression model via Loess (\citet{loess}).  The residuals from the Loess function represent the  striations and comprise the data that will be used to construct a signature. \autoref{fig:bullet-remove-curvature} shows the fitted curve in blue in the top panel, and the Loess residuals in the bottom panel. Note the difference in scale of the two figures; the range of heights of the land-engraved area on the top panel is about 120$\mu$m, while  the range of the residuals shown in the bottom panel is approximately 6$\mu$m. For some combinations of ammunition and gun, the striations are shallower.
 
 ```{r bullet-scan-crosscut-side-view, fig.cap =  "The top figure shows a sideways view of the scan from Figure 9. The figure in the bottom panel is a one-pixel representation of the sideways view of the cross-section shaded in dark gray in Figure 9, with measurements of the height of striations shown as the $z$ value on the vertical axis. The horizontal axis represents the location in microns, relative to the left most edge of the image.", out.width = ".8\\textwidth"}
 plot_grid(
-  ggdraw() + draw_image("figure/HS36-Bullet-With-Crosscut_rotate90_greyscale.png"), 
+  ggdraw() + draw_image("figure/HS36-Bullet-With-Crosscut_rotate90.png"), 
   ggplot(aes(x = x, y = value), data = filter(x3pdf, abs(y - 329.595) < 10)) +
     geom_point(size = 0.5) +
     theme_bw() +
@@ -365,10 +362,10 @@ plot_grid(
 )
 ```
 
-```{r bullet-remove-curvature, fig.cap = "Loess fit to remove curvature shown in grey (top). Residuals from the Loess fit (bottom) show the relative heights of the engraved striae.", out.width = ".8\\textwidth", fig.width = 8, fig.height = 4}
+```{r bullet-remove-curvature, fig.cap = "Loess fit to remove curvature shown in blue (top). Residuals from the Loess fit (bottom) show the relative heights of the engraved striae.", out.width = ".8\\textwidth", fig.width = 8, fig.height = 4}
 p1 <- ggplot(aes(x = x, y = value), data = filter(x3pdf, abs(y - 329.595) < 2)) +
   geom_point(size = 0.5) +
-  geom_smooth(aes(x = x, y = value), data = filter(x3pdf, abs(y - 329.595) < 10, x > 110, x < 2120), color ="grey") +
+  geom_smooth(aes(x = x, y = value), data = filter(x3pdf, abs(y - 329.595) < 10, x > 110, x < 2120)) +
   theme_bw() +
   xlim(c(0, 2300)) +
   xlab("Relative Location (in \u03BCm)") +
@@ -391,9 +388,9 @@ grid.arrange(p1, p2, nrow = 2, heights = c(1, 1.2))
 
 ## Pairwise Comparisons
 
-The signature of a land engraved area is in the form of a text file with the ordered depth of the striae.  The location at which each depth was measured can be inferred from the relative location of the measurement in the file and the size of the step between one measurement and the next. The question of interest is whether signatures extracted from a land engraved areas from two different bullets are similar enough to suggest that the bullets were fired from the same barrel. To quantify the degree of similarity between two signatures, \citet{hare2017algorithmic} propose overlaying the signatures and then computing several different features that represent the distance between the two signatures. For example, it is possible to compute a cross-correlation between two signatures, or to measure differences in the height of peaks or depth of valleys. \citet{hare2017algorithmic} define several different features that can be quantified and used to decide whether the signatures are similar enough to suggest that the bullets may have been fired from the same barrel. \autoref{fig:overlaid-signatures} shows the overlain signatures for two bullets that were fired from the same barrel. Even though the signatures are not exactly the same, they are \emph{similar enough} to suggest that they may have a common source. We revisit the definition of "similar enough" later in this chapter.
+The signature of a land-engraved area is in the form of a text file with the ordered depth of the striae.  The location at which each depth was measured can be inferred from the relative location of the measurement in the file and the size of the step between one measurement and the next. The question of interest is whether signatures extracted from a land-engraved areas from two different bullets are similar enough to suggest that the bullets were fired from the same barrel. To quantify the degree of similarity between two signatures, \citet{hare2017algorithmic} propose overlaying the signatures and then computing several different features that represent the distance between the two signatures. For example, it is possible to compute a cross-correlation between two signatures, or to measure differences in the height of peaks or depth of valleys. \citet{hare2017algorithmic} define several different features that can be quantified and used to decide whether the signatures are similar enough to suggest that the bullets may have been fired from the same barrel. \autoref{fig:overlaid-signatures} shows the overlain signatures for two bullets that were fired from the same barrel. Even though the signatures are not exactly the same, they are \emph{similar enough} to suggest that they may have a common source. We revisit the definition of "similar enough" later in this chapter.
 
-```{r overlaid-signatures, fig.cap = "Overlaid signatures of two bullets fired from the same gun.", fig.width = 8, fig.height = 3, out.width = "\\textwidth"}
+```{r overlaid-signatures, fig.cap = "Overlaid signatures of two bullets fired from the same gun.", out.width = ".8\\textwidth"}
 crosscut2 <- x3p_crosscut(x3pfileb2)
 grooves2 <- list(groove = c(175, 2100))
 signature2 <- cc_get_signature(crosscut2, grooves2)
@@ -409,12 +406,11 @@ ggplot(aes(x = x, y = sig, linetype = type), data = aligndf) +
   xlim(c(0, 2300)) +
   xlab("Relative Location (in μm)") +
   ylab("Signatures (in μm)") +
-  theme_bw() + 
-  theme(plot.margin = margin(b = 0, unit = "pt"), legend.background = element_rect(fill = "transparent")) +
+  theme(plot.margin = margin(b = 0, unit = "pt")) +
   scale_linetype_discrete(guide = F)
 ```
 
-\citet{hare2017algorithmic} extracted seven features from the overlain signatures; to explore whether any of them would serve to accurately determine whether two bullets could have been fired from the same gun, they carried out the following experiment. First, they obtained 3D images of bullets that were fired by Hamby et al. using 10 consecutively rifled 9mm Ruger barrels.  The data consisted of two bullets known to have been fired by each of the 10 barrels, plus 15 "unknown" bullets, where we know that at least one and no more than three were fired by each of the test barrels. The design of this study has been critized \citep{pcast2016} because it is \emph{closed}, meaning that after the first few comparisons, the number of candidates becomes smaller and smaller. Next they constructed all possible pairs of images of land engraved areas, resulting in a total of 10,384 pairs of lands; of these, 172 pairs corresponded to the same land on bullets fired from the same barrel, and the rest (10,212) corresponded to either different pairs of land engraved areas on bullets fired from the same barrels or to pairs of land engraved areas on bullets fired from different barrels.  Two damaged lands were excluded from the comparisons. Then, for each pair of images \citet{hare2017algorithmic} computed the value of each of seven features; the distribution of values of each of the features among pairs of known matching land engraved areas, and among pairs of known non-matching land engraved areas are shown in \autoref{fig:empirical-feature-dist}.
+\citet{hare2017algorithmic} extracted seven features from the overlain signatures; to explore whether any of them would serve to accurately determine whether two bullets could have been fired from the same gun, they carried out the following experiment. First, they obtained 3D images of bullets that were fired by Hamby et al. using 10 consecutively rifled 9mm Ruger barrels.  The data consisted of two bullets known to have been fired by each of the 10 barrels, plus 15 "unknown" bullets, where we know that at least one and no more than three were fired by each of the test barrels. The design of this study has been critized \citep{pcast2016} because it is \emph{closed}, meaning that after the first few comparisons, the number of candidates becomes smaller and smaller. Next they constructed all possible pairs of images of land-engraved areas, resulting in a total of 10,384 pairs of lands; of these, 172 pairs corresponded to the same land on bullets fired from the same barrel, and the rest (10,212) corresponded to either different pairs of land-engraved areas on bullets fired from the same barrels or to pairs of land-engraved areas on bullets fired from different barrels.  Two damaged lands were excluded from the comparisons. Then, for each pair of images \citet{hare2017algorithmic} computed the value of each of seven features; the distribution of values of each of the features among pairs of known matching land-engraved areas, and among pairs of known non-matching land-engraved areas are shown in \autoref{fig:empirical-feature-dist}.
 
 
 ```{r empirical-feature-dist, fig.cap = "Empirical feature distributions", fig.width = 8, fig.height = 4, out.width = ".8\\textwidth"}
@@ -429,11 +425,10 @@ tmp %>%
   ggplot(aes(x = value, fill = Matches)) + 
   theme_bw() + 
   geom_density(color = "black", alpha = .75, adjust = 2) + 
-  scale_fill_manual(values = c("Non-Match (KNM)" = "white", "Match (KM)" = "darkgrey")) +
+  scale_fill_manual(values = c("Non-Match (KNM)" = "darkgrey", "Match (KM)" = "darkorange")) +
   facet_wrap(~key, scales = "free", ncol = 4) + 
   ylab("Density") + 
-  theme_bw() + 
-  theme(legend.position = c(1, 0), legend.justification = c(1, 0), axis.title.x = element_blank(), legend.background = element_rect(fill = "transparent"))
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0), axis.title.x = element_blank())
 ```
 \autoref{fig:empirical-feature-dist} suggests that none of the seven features individually can discriminate between known matching and known non-matching pairs.  This is because in every case there is significant overlap between the distributions of feature values among the matching and the non-matching pairs. \citet{hare2017algorithmic} proposed instead that features be combined into a single score using a random forest. A random forest is an ensemble supervised learning method for classification or regression based on the idea of decision trees \citep{breimanRandomForests2001}. For classification, the random forest is composed of many decision trees (500 or more) that are grown using bootstrap samples of the original data, and selecting a random subset of the features for each binary split.  The output the most likely class for each unit, and each unit is scored between 0 and 1, where larger scores denote a higher degree of similarity. Since the scores represent the average proportion of units of the predicted class in each terminal node, random forest scores can be thought of as the empirical probability of same class computed for each pair of images.
 
@@ -446,21 +441,19 @@ features <- read.csv("data/H44-old-features.csv")
 b12 <- features %>% filter(barrel1=="1", bullet1== "1",
                            barrel2=="1", bullet2== "2")
 p1 <- b12 %>% ggplot(aes(x = land1, y = land2, fill = rfscore)) + 
-  geom_tile(color = "grey90") + ggtitle ("Same barrel") +  
-  scale_fill_gradient2("RF score: ", low = "white", high = "darkgrey", limits=c(0,1)) +
+  geom_tile() + ggtitle ("Same barrel") +  
+  scale_fill_gradient2("RF score: ", midpoint=0.3, low = "darkgrey", high = "orange", limits=c(0,1)) +
   theme_bw() + 
   xlab ("Bullet 2") + ylab("Bullet 1") +
-  theme_bw() + 
   theme(legend.position = "bottom") + coord_equal()
 
 bab <- features %>% filter(barrel1=="1", bullet1== "1",
                            barrel2=="2", bullet2== "1")
 p2 <- bab %>% ggplot(aes(x = land1, y = land2, fill = rfscore)) + 
-  geom_tile(color = "grey90") + ggtitle ("Different barrel") +  
-  scale_fill_gradient2("RF score: ", low = "white", high = "darkgrey", limits=c(0,1)) +
+  geom_tile() + ggtitle ("Different barrel") +  
+  scale_fill_gradient2("RF score: ", midpoint=0.3, low = "darkgrey", high = "orange", limits=c(0,1)) +
   theme_bw() + 
   xlab ("Bullet 2") + ylab("Bullet 1") +
-  theme_bw() + 
   theme(legend.position = "bottom") + coord_equal()
 ```
 
@@ -502,7 +495,6 @@ df2 %>% gather("case", "values", starts_with("case")) %>%
   scale_y_discrete(labels = paste0("L",1:6)) +
   scale_fill_manual("Cell included in SA(A,k)", values = c("white", "grey20")) + 
   coord_equal() +
-  theme_bw() +
   theme(legend.position="bottom")
 ```
 
@@ -512,14 +504,14 @@ $k=2$ is higher than the other sequence averages, and also higher than the seque
 ### Results for the Hamby set of bullets
 
 For the case of the Hamby bullets, the random forest produced a perfect classification of all pairs into the two classes. The separation between the values of the scores among known matching and known non-matching pairs was complete, as is shown in \autoref{fig:score-dist}.
-```{r score-dist, fig.cap = "Random forest scores for the Hamby et al. (2009) known matching pairs of land engraved areas (dark gray) and known non-matching pairs (light gray).", fig.width = 8, fig.height = 4, out.width = ".8\\textwidth"}
+```{r score-dist, fig.cap = "Random forest scores for the Hamby et al. (2009) known matching pairs of land-engraved areas (dark gray) and known non-matching pairs (light gray).", fig.width = 8, fig.height = 4, out.width = ".8\\textwidth"}
 f3nest %>% select(KM = KM_sam, sam_rf) %>%
   mutate(method = "Forest") %>%
   mutate(KM2 = c("KNM", "KM")[KM + 1] %>% as.factor()) %>%
   ggplot(aes(x = sam_rf, y = KM2, color = KM2, shape = KM2)) +
   facet_grid(method~.) +
   geom_jitter() +
-  scale_color_manual(guide = F, values = c("KNM" = "grey80", "KM" = "grey20")) +
+  scale_color_manual(guide = F, values = c("KNM" = "darkgrey", "KM" = "darkorange")) +
   scale_shape_discrete(guide = F) +
   theme_bw() +
   theme(axis.title.y = element_blank()) +
@@ -528,8 +520,8 @@ f3nest %>% select(KM = KM_sam, sam_rf) %>%
 
 A limitation of all learning algorithms is that they depend critically on the data used to train them and they tend to over-fit the training data. Consequently, the algorithm’s performance when classifying a new set of units can be much worse and result in large mis-classification errors. This occurs when the minimizing the bias in the training data is the dominating criterion. To guard against over-fitting, it is possible to set aside a portion of the training data that can then be used as a test dataset, but even then, the mis-classification error tends to be under-estimated, albeit to a lower extent.
 
-To explore whether the random forest fitted to the \citet{hamby2009} bullets has good classification performance when used to classify pairs of land engraved areas from bullets fired from other barrels or by guns of different make and model, and when the ammunition is also made by a different manufacturer, \citet{hare2017algorithmic} applied the model to thousands of pairs of known matching and known non-matching land engraved areas obtained from crime laboratories across the United States. Results have been promising; the random forest correctly determined every pair of bullets in every study when the gun barrel had conventional (rather than polygonal) rifling and striations were reasonably well marked, and when bullets were not coated with a polymer that flakes on contact with the barrel. 
- \autoref{fig:score-match-plot} shows the results observed in one such test set. Each pairwise comparison is represented as a square, with the center of the square shaded to represent the composite match score for the six lands on each bullet; the border of the square is colored dark grey if the bullets are from the same source. In the test set shown in \autoref{fig:score-match-plot}, there are three reference shots from each of eight barrels, and 10 fired rounds of unknown provenance. The test set was open, which means that it was possible that some of the test shots were not fired by any of the eight study barrels and that one or more of the barrels may have fired none of the 10 test shots; in this case, questioned bullets Q, Y, and Z did not originate from the 8 barrels in the study.
+To explore whether the random forest fitted to the \citet{hamby2009} bullets has good classification performance when used to classify pairs of land-engraved areas from bullets fired from other barrels or by guns of different make and model, and when the ammunition is also made by a different manufacturer, \citet{hare2017algorithmic} applied the model to thousands of pairs of known matching and known non-matching land-engraved areas obtained from crime laboratories across the United States. Results have been promising; the random forest correctly determined every pair of bullets in every study when the gun barrel had conventional (rather than polygonal) rifling and striations were reasonably well marked, and when bullets were not coated with a polymer that flakes on contact with the barrel. 
+ \autoref{fig:score-match-plot} shows the results observed in one such test set. Each pairwise comparison is represented as a square, with the center of the square shaded to represent the composite match score for the six lands on each bullet; the border of the square is colored orange if the bullets are from the same source. In the test set shown in \autoref{fig:score-match-plot}, there are three reference shots from each of eight barrels, and 10 fired rounds of unknown provenance. The test set was open, which means that it was possible that some of the test shots were not fired by any of the eight study barrels and that one or more of the barrels may have fired none of the 10 test shots; in this case, questioned bullets Q, Y, and Z did not originate from the 8 barrels in the study.
  
 
  
@@ -566,7 +558,10 @@ f2 <- features %>%
 
 unknowns <- read.csv("data/pd-features-unknown.csv")
 unknowns <- unknowns %>% filter(bullet1 != bullet2)
-unknowns <- unknowns %>% mutate(
+
+unknowns <- unknowns %>% 
+  ungroup() %>% 
+  mutate(
     bullet2 = gsub("Unknown 1-", "", bullet2),
     bullet1 = gsub("Unknown 1-", "", bullet1)
   )
@@ -576,16 +571,18 @@ f3 <- rbind(
       b1, b2, barrel1, bullet1,
       land1, bullet2, land2, ccf, rfscore, cms, KM
     ) %>%
+    ungroup() %>% 
     mutate(barrel2 = "Unknown"),
   unknowns %>%
     select(
       b1, b2, bullet1,
       land1, bullet2, land2, ccf, rfscore, cms, 
     ) %>%
+    ungroup() %>% 
     mutate(barrel1 = "Unknown", barrel2 = "Unknown", KM = FALSE)
 )
 
-pdnest <- f3 %>% group_by(bullet2, barrel1, bullet1) %>% nest() %>% ungroup()
+pdnest <- f3 %>% group_by(bullet2, barrel1, bullet1) %>% nest()
 
 pdnest <- pdnest %>% mutate(
   sam_ccf = data %>% purrr::map_dbl(.f = function(d) {
@@ -606,21 +603,22 @@ pdnest <- pdnest %>% mutate(
 )
 
 pdnest <- pdnest %>%
+  ungroup() %>% 
   mutate(
     bullet2 = factor(bullet2, levels = rev(c("N", "B", "E", "T", "H", "J", "K", "Q", "Y", "Z"))),
     bullet1 = factor(bullet1, levels = c("B1", "B2", "B3", rev(levels(bullet2))))
   )
 p3 <- pdnest %>%
   ggplot(aes(y = bullet2, x = bullet1, fill = sam_rf)) +
-  geom_tile(size = 1, color = "grey95") +
+  geom_tile(size = 1) +
   facet_grid(. ~ barrel1, scales = "free", space = "free") +
   ylab("Questioned bullets") +
   xlab("Known bullets and Questioned bullets") +
   scale_fill_gradient2("RF score ",
-    low = "white",
-    high = "darkgrey", midpoint = 0.45, limits = c(0, 1)
+    low = "darkgrey",
+    high = "darkorange", midpoint = 0.45, limits = c(0, 1)
   ) +
-  scale_colour_manual("Same source", values = "grey20") +
+  scale_colour_manual("Same source", values = "darkorange") +
   scale_y_discrete() +
   theme_bw() +
   theme(legend.position = "bottom") +
@@ -637,7 +635,7 @@ pdnest$samesource <- pdnest$KM
 p3
 ```
 
-\citet{hare2017algorithmic} used a threshold of 0.5 for the SAM computed from the random forest score to categorize pairs of bullets into "same" and "different" gun. A row of three dark grey squares indicates that the corresponding questioned bullet matched all three of the reference shots fired by the barrel indicated in the column. In all cases, the algorithm classified the questioned bullets correctly. It correctly concluded, for example, that the last three questioned shots labeled $Q, Y$ and $Z$ were not similar enough to any of the reference shots to declare a match, and that the barrel labeled $U10$ had not fired any of the questioned rounds.
+\citet{hare2017algorithmic} used a threshold of 0.5 for the SAM computed from the random forest score to categorize pairs of bullets into "same" and "different" gun. A row of three orange squares indicates that the corresponding questioned bullet matched all three of the reference shots fired by the barrel indicated in the column. In all cases, the algorithm classified the questioned bullets correctly. It correctly concluded, for example, that the last three questioned shots labeled $Q, Y$ and $Z$ were not similar enough to any of the reference shots to declare a match, and that the barrel labeled $U10$ had not fired any of the questioned rounds.
 
 The comparison method proposed by \citet{hare2017algorithmic} is promising, the method must undergo extensive additional testing and validation before it can be implemented in real casework. 
 Researchers working on this type of problems have found that  the optimal score threshold for categorizing pairs of bullets as “same” or “different” varies from dataset to dataset. This may be a consequence of the fact that the random forest that \citet{hare2017algorithmic} have been applying to those sets of images was trained only once and only on a small training set. As more 3D images become available, it will be important to re-train the forest on a more diverse set that perhaps includes combinations of bullets and guns of the same caliber but manufactured by different companies.  This issue brings up a more general statistical question:  what are the factors that have an effect on the attributes of the striations that the gun imparts on a bullet and consequently, on the performance of the classification algorithm? It seems reasonable to speculate that physical properties such as the hardness of the inside of the barrel of the gun and of the bullet jacket might be important factors. Type of rifling and the degree of smoothness of the inside of the barrel are also likely to be factors that affect the characteristics of striations. To date, there have been no well-designed, appropriately powered studies to begin exploring some of these questions.
@@ -655,7 +653,7 @@ The probative value of evidence, or more precisely the \emph{weight of evidence}
 
 In the absence of a statistical model that may permit estimating the likelihood of a pattern under different assumptions about provenance, it may be possible to compute an empirical estimate of the frequency with which a given degree of similarity between two items can be expected when the items have a common source and when they do not. \autoref{fig:l2l-scores} illustrates this idea using firearms as an example.
 
-```{r l2l-scores, fig.width = 8, fig.height = 4, out.width = ".8\\textwidth", fig.cap = "Empirical distributions of random forest scores for pairs of land engraved area scans known to have been produced from the same land (grey) and known to have originated from different lands (white). The vertical lines in the top and bottom panels represent the score that was obtained when comparing a questioned with a reference scan of a land engraved area."}
+```{r l2l-scores, fig.width = 8, fig.height = 4, out.width = ".8\\textwidth", fig.cap = "Empirical distributions of random forest scores for pairs of land-engraved area scans known to have been produced from the same land (orange) and known to have originated from different lands (gray). The vertical lines in the top and bottom panels represent the score that was obtained when comparing a questioned with a reference scan of a land-engraved area."}
 # scores_all <- bind_rows(
 #   data_frame(score=rbeta(10000, 2, 10), class = "Non-mates"),
 #   data_frame(score=rbeta(10000, 4, 2), class = "Mates")
@@ -669,8 +667,8 @@ f3_plot <- f3 %>%
 # This uses land-to-land data because it's at least slightly more variable - bullet-to-bullet comparisons are so separated this calculation is not really feasible. 
 ggplot() +
   geom_density(aes(rfscore, color = KM, fill=KM), data = f3_plot, alpha=0.5) +
-  scale_fill_manual("", values = c("darkgrey", "white")) + 
-  scale_color_manual("", values = c("darkgrey", "grey80")) + 
+  scale_fill_manual("", values = c("orange", "grey50")) + 
+  scale_color_manual("", values = c("orange", "grey50")) + 
   geom_vline(aes(xintercept = score), data = sample_scores) + 
   facet_grid(panel~.) + 
   scale_x_continuous("Score") + 
@@ -679,7 +677,7 @@ ggplot() +
 
 ```
 
-```{r densities, fig.width = 8, fig.height = 3.5, fig.cap="Densities of known matches (dark grey) and known non-matches (light grey) corresponding to all pair-wise land comparisons of the Hamby set.  The large points along the x axis mark three hypothetical scores a comparison might result in. The number in white inside the points gives the corresponding score-based likelihood ratio, indicating the likelihood to observe this score from a known match rather than a known non-match. ", out.width = ".8\\textwidth"}
+```{r densities, fig.width = 8, fig.height = 3.5, fig.cap="Densities of known matches (orange) and known non-matches (grey) corresponding to all pair-wise land comparisons of the Hamby set.  The large grey points along the x axis mark three hypothetical scores a comparison might result in. The number in white inside the points gives the corresponding score-based likelihood ratio, indicating the likelihood to observe this score from a known match rather than a known non-match. ", out.width = ".8\\textwidth"}
 tmpnest <- tmp %>% nest(-KM) %>% mutate(
   model = data %>% purrr::map(.f = function(d) {
     dens = density(d$ccf, from = 0, to = 1, n = 1001)
@@ -690,9 +688,8 @@ tmpnest <- tmp %>% nest(-KM) %>% mutate(
 p <- tmp %>% 
   mutate(truth = c("Different source", "Same source")[KM+1]) %>%
   ggplot(aes(x = ccf)) +
-  geom_density(aes(color = truth, fill=truth), alpha = 0.6) +
-  scale_fill_manual("", values = c("white", "darkgrey")) +
-  scale_color_manual("", values = c("lightgrey", "darkgrey")) +
+  geom_density(aes(fill=truth), alpha = 0.6) +
+  scale_fill_manual("", values = c("darkgrey", "darkorange")) +
   theme(legend.position = "top")
 
 LRscores <- data.frame(x = c(0.4, 0.6, 0.8))
@@ -703,14 +700,14 @@ LRscores$ylabel <- pmax(LRscores$KM, LRscores$KNM)
 
 p + 
   geom_line(data = tmpnest$model[[2]], 
-            aes(x = x, y = y), size=1.25, colour="grey20", fill=NA) +
+            aes(x = x, y = y), size=1.25, colour="darkorange", fill=NA) +
   geom_line(data = tmpnest$model[[1]], 
-            aes(x = x, y = y), size=1.25, colour="grey90", fill=NA) +
+            aes(x = x, y = y), size=1.25, colour="darkgrey", fill=NA) +
   xlab("Random forest score") +
   geom_segment(data = LRscores, aes(x=x, xend=x, y=0, yend=KNM), 
-               colour="grey90", size = 1.25) +
+               colour="darkgrey", size = 1.25) +
   geom_segment(data = LRscores, aes(x=x, xend=x, y=0, yend=KM), 
-               colour="grey20", size = 1.25) +
+               colour="darkorange", size = 1.25) +
   geom_point(data = LRscores, aes(x = x, y = 0), colour = "grey30", size = 15, alpha = 0.9) +
   geom_text(data=LRscores[-3,], aes(x = x, y = 0, label=lr), 
             colour = "grey90", size=4) +
@@ -718,11 +715,10 @@ p +
             colour = "grey90", size=4) +
   scale_y_continuous("Density", limits = c(-0.25, 4)) + 
   xlim(c(0,1)) + 
-  theme_bw() + 
   theme(legend.position = c(1, 1), legend.justification = c(1, 1), legend.direction = "vertical", legend.title = element_blank())
 ```
 
-The empirical distributions of similarity scores shown in dark and light grey in \autoref{fig:densities} represent the values of the score that could have been obtained when comparing bullets fired by the same or by different guns, respectively. Suppose that these distributions of scores were obtained from a very large number of pairs of bullets representing the population of guns and ammunition of a certain caliber. A crime is committed and a bullet is recovered from the scene. The suspect’s gun is test fired and the bullet in evidence is compared to the test shot using the algorithm that produced the background scores. Suppose that the resulting score is 0.8, as in  \autoref{fig:densities}. Visual inspection suggests that a score of 0.8 appears to be likely if the two bullets were fired from the same gun and unlikely otherwise. A \emph{score-based likelihood ratio} (SLR) is computed as the height of dark grey empirical density over the height of the light grey distribution at 0.8, which in this example comes out to 371.4. The interpretation of this value is the following:  a score of 0.8 is about 370 more likely when two bullets (or cartridge cases) were fired from the same gun than when fired from different guns, so the score represents strong support for the same source proposition.  We could also calculate the probability of observing a score of 0.8 under each of the two empirical distributions. Regardless of the method, we would conclude that the two bullets were likely fired by the same gun. If instead the similarity score was 0.3, it would not be possible to reach a conclusion regarding source with any degree of confidence. The ratio of the heights of both distributions for a score of 0.3 is 0.3 indicating that it is about twice as likely to observe that score if bullets were fired by different guns, which is only weak evidence in favor of the hypothesis of different source. \citet{lund2017} and references therein discuss some potential limitations of score-based likelihood ratios to approximate model-based likelihood ratios.
+The empirical distributions of similarity scores shown in orange and in gray in \autoref{fig:densities} represent the values of the score that could have been obtained when comparing bullets fired by the same or by different guns, respectively. Suppose that these distributions of scores were obtained from a very large number of pairs of bullets representing the population of guns and ammunition of a certain caliber. A crime is committed and a bullet is recovered from the scene. The suspect’s gun is test fired and the bullet in evidence is compared to the test shot using the algorithm that produced the background scores. Suppose that the resulting score is 0.8, as in  \autoref{fig:densities}. Visual inspection suggests that a score of 0.8 appears to be likely if the two bullets were fired from the same gun and unlikely otherwise. A \emph{score-based likelihood ratio} (SLR) is computed as the height of orange empirical density over the height of the grey distribution at 0.8, which in this example comes out to 371.4. The interpretation of this value is the following:  a score of 0.8 is about 370 more likely when two bullets (or cartridge cases) were fired from the same gun than when fired from different guns, so the score represents strong support for the same source proposition.  We could also calculate the probability of observing a score of 0.8 under each of the two empirical distributions. Regardless of the method, we would conclude that the two bullets were likely fired by the same gun. If instead the similarity score was 0.3, it would not be possible to reach a conclusion regarding source with any degree of confidence. The ratio of the heights of both distributions for a score of 0.3 is 0.3 indicating that it is about twice as likely to observe that score if bullets were fired by different guns, which is only weak evidence in favor of the hypothesis of different source. \citet{lund2017} and references therein discuss some potential limitations of score-based likelihood ratios to approximate model-based likelihood ratios.
 
 The conclusion is that in order to assess the probative value of a match between two pieces of evidence, we need to have extensive background information about the population from which those two pieces of evidence might have originated. Thus, the construction of those reference databases must become a priority for the scientific community in general and for the forensics community in particular.
 
