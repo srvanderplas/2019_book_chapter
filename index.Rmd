@@ -206,7 +206,7 @@ knitr::include_graphics("figure/CMCFig2Song2018.pdf")
 
 \begin{figure}
 \centering
-\includegraphics[width=.8\textwidth]{figure/NIST-CMS.png} 
+\includegraphics[width=.8\textwidth]{figure/NIST-CMS_greyscale.png} 
 \caption{The method of Congruent Matching Cells.  Top two panels illustrate the case where the two cartridge cases were fired from the same gun. The bottom two panels show an example of two cartridge cases fired from different guns.  \footnotesize{mage downloaded from NIST, (\url{https://www.nist.gov/news-events/news/2018/02/how-good-match-it-putting-statistics-forensic-firearms-identification})}.  }
 \label{fig:CMC}
 \end{figure}
