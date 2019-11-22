@@ -447,7 +447,7 @@ b12 <- features %>% filter(barrel1=="1", bullet1== "1",
                            barrel2=="1", bullet2== "2")
 p1 <- b12 %>% ggplot(aes(x = land1, y = land2, fill = rfscore)) + 
   geom_tile(color = "grey90") + ggtitle ("Same barrel") +  
-  scale_fill_gradient2("RF score: ", low = "white", high = "darkgrey", limits=c(0,1)) +
+  scale_fill_gradient2("RF score: ", low = "white", high = "grey10", limits=c(0,1)) +
   theme_bw() + 
   xlab ("Bullet 2") + ylab("Bullet 1") +
   theme_bw() + 
@@ -457,7 +457,7 @@ bab <- features %>% filter(barrel1=="1", bullet1== "1",
                            barrel2=="2", bullet2== "1")
 p2 <- bab %>% ggplot(aes(x = land1, y = land2, fill = rfscore)) + 
   geom_tile(color = "grey90") + ggtitle ("Different barrel") +  
-  scale_fill_gradient2("RF score: ", low = "white", high = "darkgrey", limits=c(0,1)) +
+  scale_fill_gradient2("RF score: ", low = "white", high = "grey10", limits=c(0,1)) +
   theme_bw() + 
   xlab ("Bullet 2") + ylab("Bullet 1") +
   theme_bw() + 
@@ -495,12 +495,12 @@ df2 %>% gather("case", "values", starts_with("case")) %>%
   mutate(case = gsub("case", "", case)) %>%
   mutate(case = paste0("k = ", as.numeric(case)-1)) %>%
   ggplot(aes(x = factor(x), y = factor(y, levels=1:6), fill = values)) + 
-  geom_tile(colour = "grey20") + 
+  geom_tile(colour = "grey10") + 
   facet_wrap(~case, ncol = 6) +
   xlab("Bullet 2") + ylab("Bullet 1") +
   scale_x_discrete(labels = paste0("L",1:6)) +
   scale_y_discrete(labels = paste0("L",1:6)) +
-  scale_fill_manual("Cell included in SA(A,k)", values = c("white", "grey20")) + 
+  scale_fill_manual("Cell included in SA(A,k)", values = c("white", "grey10")) + 
   coord_equal() +
   theme_bw() +
   theme(legend.position="bottom")
@@ -519,7 +519,7 @@ f3nest %>% select(KM = KM_sam, sam_rf) %>%
   ggplot(aes(x = sam_rf, y = KM2, color = KM2, shape = KM2)) +
   facet_grid(method~.) +
   geom_jitter() +
-  scale_color_manual(guide = F, values = c("KNM" = "grey80", "KM" = "grey20")) +
+  scale_color_manual(guide = F, values = c("KNM" = "grey80", "KM" = "grey10")) +
   scale_shape_discrete(guide = F) +
   theme_bw() +
   theme(axis.title.y = element_blank()) +
@@ -620,7 +620,7 @@ p3 <- pdnest %>%
     low = "white",
     high = "darkgrey", midpoint = 0.45, limits = c(0, 1)
   ) +
-  scale_colour_manual("Same source", values = "grey20") +
+  scale_colour_manual("Same source", values = "grey10") +
   scale_y_discrete() +
   theme_bw() +
   theme(legend.position = "bottom") +
@@ -669,8 +669,8 @@ f3_plot <- f3 %>%
 # This uses land-to-land data because it's at least slightly more variable - bullet-to-bullet comparisons are so separated this calculation is not really feasible. 
 ggplot() +
   geom_density(aes(rfscore, color = KM, fill=KM), data = f3_plot, alpha=0.5) +
-  scale_fill_manual("", values = c("darkgrey", "white")) + 
-  scale_color_manual("", values = c("darkgrey", "grey80")) + 
+  scale_fill_manual("", values = c("grey10", "white")) + 
+  scale_color_manual("", values = c("grey10", "grey80")) + 
   geom_vline(aes(xintercept = score), data = sample_scores) + 
   facet_grid(panel~.) + 
   scale_x_continuous("Score") + 
@@ -691,8 +691,8 @@ p <- tmp %>%
   mutate(truth = c("Different source", "Same source")[KM+1]) %>%
   ggplot(aes(x = ccf)) +
   geom_density(aes(color = truth, fill=truth), alpha = 0.6) +
-  scale_fill_manual("", values = c("white", "darkgrey")) +
-  scale_color_manual("", values = c("lightgrey", "darkgrey")) +
+  scale_fill_manual("", values = c("white", "grey10")) +
+  scale_color_manual("", values = c("lightgrey", "grey10")) +
   theme(legend.position = "top")
 
 LRscores <- data.frame(x = c(0.4, 0.6, 0.8))
@@ -703,7 +703,7 @@ LRscores$ylabel <- pmax(LRscores$KM, LRscores$KNM)
 
 p + 
   geom_line(data = tmpnest$model[[2]], 
-            aes(x = x, y = y), size=1.25, colour="grey20", fill=NA) +
+            aes(x = x, y = y), size=1.25, colour="grey10", fill=NA) +
   geom_line(data = tmpnest$model[[1]], 
             aes(x = x, y = y), size=1.25, colour="grey90", fill=NA) +
   xlab("Random forest score") +
