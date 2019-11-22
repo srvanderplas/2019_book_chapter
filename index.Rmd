@@ -612,13 +612,13 @@ pdnest <- pdnest %>%
   )
 p3 <- pdnest %>%
   ggplot(aes(y = bullet2, x = bullet1, fill = sam_rf)) +
-  geom_tile(size = 1, color = "grey95") +
+  geom_tile(size = 1, color = "grey90") +
   facet_grid(. ~ barrel1, scales = "free", space = "free") +
   ylab("Questioned bullets") +
   xlab("Known bullets and Questioned bullets") +
   scale_fill_gradient2("RF score ",
     low = "white",
-    high = "darkgrey", midpoint = 0.45, limits = c(0, 1)
+    high = "grey20", limits = c(0, 1)
   ) +
   scale_colour_manual("Same source", values = "grey10") +
   scale_y_discrete() +
