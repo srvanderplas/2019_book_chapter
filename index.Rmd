@@ -439,7 +439,7 @@ tmp %>%
 \autoref{fig:empirical-feature-dist} suggests that none of the seven features individually can discriminate between known matching and known non-matching pairs.  This is because in every case there is significant overlap between the distributions of feature values among the matching and the non-matching pairs. \citet{hare2017algorithmic} proposed instead that features be combined into a single score using a random forest. A random forest is an ensemble supervised learning method for classification or regression based on the idea of decision trees \citep{breimanRandomForests2001}. For classification, the random forest is composed of many decision trees (500 or more) that are grown using bootstrap samples of the original data, and selecting a random subset of the features for each binary split.  The model outputs the most likely class for each unit, and each unit is scored between 0 and 1, where larger scores denote a higher degree of similarity. Since the scores represent the average proportion of units of the predicted class in each terminal node, random forest scores can be thought of as the empirical probability of same class computed for each pair of images.
 
 
-### From Land-to-land comparisons to Bullet-to-bullet comparisons
+### From land-to-land comparisons to bullet-to-bullet comparisons
  
 ```{r, echo=FALSE, results = 'hide', warning = FALSE, message = FALSE}
 features <- read.csv("data/H44-old-features.csv") 
