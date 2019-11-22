@@ -75,6 +75,7 @@ inphase <- function(land1, land2, sam_rf_phase, ...) {
 }
 
 tmp <- unnest(f3nest) %>%
+  ungroup() %>% 
   mutate(inphase = purrr::pmap_lgl(., inphase),
          KM = inphase & KM_sam)
 ```
