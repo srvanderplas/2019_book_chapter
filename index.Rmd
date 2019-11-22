@@ -557,22 +557,26 @@ f2 <- features %>%
 
 unknowns <- read.csv("data/pd-features-unknown.csv")
 unknowns <- unknowns %>% filter(bullet1 != bullet2)
-unknowns <- unknowns %>% mutate(
-  bullet2 = gsub("Unknown 1-", "", bullet2),
-  bullet1 = gsub("Unknown 1-", "", bullet1)
-)
+unknowns <- unknowns %>% 
+  ungroup() %>% 
+  mutate(
+    bullet2 = gsub("Unknown 1-", "", bullet2),
+    bullet1 = gsub("Unknown 1-", "", bullet1)
+  )
 f3 <- rbind(
   f2 %>%
     select(
       b1, b2, barrel1, bullet1,
       land1, bullet2, land2, ccf, rfscore, cms, KM
     ) %>%
+    ungroup() %>% 
     mutate(barrel2 = "Unknown"),
   unknowns %>%
     select(
       b1, b2, bullet1,
       land1, bullet2, land2, ccf, rfscore, cms, 
     ) %>%
+    ungroup() %>% 
     mutate(barrel1 = "Unknown", barrel2 = "Unknown", KM = FALSE)
 )
 
@@ -597,6 +601,7 @@ pdnest <- pdnest %>% mutate(
 )
 
 pdnest <- pdnest %>%
+  ungroup() %>% 
   mutate(
     bullet2 = factor(bullet2, levels = rev(c("N", "B", "E", "T", "H", "J", "K", "Q", "Y", "Z"))),
     bullet1 = factor(bullet1, levels = c("B1", "B2", "B3", rev(levels(bullet2))))
